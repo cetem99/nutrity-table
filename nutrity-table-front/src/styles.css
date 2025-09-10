@@ -2,7 +2,7 @@
 
 :root {
   --primary-color: rgba(22, 162, 73); /* 70% opacity */
-  --secondary-color: rgba(22, 162, 73, 0.7);
+  --secondary-color: rgba(22, 162, 73, 0.2);
   --primary-hover: #128040;
   --text-on-primary: #ffffff;
   --background-color: #f8f9fa;

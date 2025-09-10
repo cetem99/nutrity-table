@@ -19,10 +19,10 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              { "glob": "**/*", "input": "src/assets", "output": "assets/" },
+              { "glob": "**/*", "input": "public" },
+              { "glob": "**/*.png", "input": "src/assets/images", "output": "assets/images/" }
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
@@ -80,10 +80,10 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/favicon.ico",
+              { "glob": "**/*", "input": "src/assets", "output": "assets/" },
+              { "glob": "**/*", "input": "public" },
+              { "glob": "**/*.png", "input": "src/assets/images", "output": "assets/images/" }
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
