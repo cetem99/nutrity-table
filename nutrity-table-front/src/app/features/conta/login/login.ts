@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
+import { LoginService, LoginRequest, LOGIN_SERVICE } from '../../../core/services/login';
+import { HttpClientModule } from '@angular/common/http';
 
 declare const google: any; // Para evitar erros de TypeScript
-
 declare const FB: any; // Para evitar erros de TypeScript
 
 @Component({
@@ -14,15 +15,19 @@ declare const FB: any; // Para evitar erros de TypeScript
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
-export class Login {
+export class LoginComponent {
   loginForm: FormGroup;
   isLoading = false;
   errorMessage = '';
   showPassword = false;
 
+  showSuccessMessage: boolean = false;
+
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    @Inject(LOGIN_SERVICE) private loginService: LoginService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -32,6 +37,17 @@ export class Login {
   }
 
   ngOnInit() {
+    // Check for registration success message
+    this.route.queryParams.subscribe(params => {
+      if (params['registered'] === 'true') {
+        this.showSuccessMessage = true;
+        // Auto-hide success message after 5 seconds
+        setTimeout(() => {
+          this.showSuccessMessage = false;
+        }, 5000);
+      }
+    });
+
     // Inicialização do Google Sign-In
     this.initializeGoogleSignIn();
     // Inicialização do Facebook SDK
@@ -83,21 +99,22 @@ export class Login {
     this.isLoading = true;
     this.errorMessage = '';
 
-    // Simulando uma requisição de login
-    setTimeout(() => {
-      const { email, senha, lembrar } = this.loginForm.value;
-      
-      // Aqui você faria a chamada real para a API de autenticação
-      console.log('Tentativa de login com:', { email, senha, lembrar });
-      
-      // Simulando login bem-sucedido
-      this.isLoading = false;
-      this.router.navigate(['/dashboard']); // Redireciona para o dashboard após o login
-      
-      // Em caso de erro:
-      // this.errorMessage = 'Credenciais inválidas. Tente novamente.';
-      // this.isLoading = false;
-    }, 1500);
+    const credenciais: LoginRequest = {
+      email: this.loginForm.value.email,
+      senha: this.loginForm.value.senha
+    };
+
+    this.loginService.login(credenciais).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.router.navigate(['/dashboard']);
+      },
+      error: (erro) => {
+        this.isLoading = false;
+        this.errorMessage = 'E-mail ou senha inválidos';
+        console.error('Erro no login:', erro);
+      }
+    });
   }
 
   // Login com Google

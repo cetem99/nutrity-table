@@ -14,7 +14,12 @@
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" #form="ngForm" class="login-form">
-      <!-- Mensagem de erro -->
+      <!-- Success message after registration -->
+      <div *ngIf="showSuccessMessage" class="alert alert-success">
+        <i class="fas fa-check-circle"></i> Cadastro realizado com sucesso! Faça login para continuar.
+      </div>
+      
+      <!-- Error message -->
       <div *ngIf="errorMessage" class="alert alert-error">
         <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
       </div>
@@ -54,10 +59,14 @@
             [ngClass]="{ 'is-invalid': (senha?.invalid && (senha?.touched || form.submitted)) }"
             autocomplete="current-password"
           >
-          <button type="button" class="toggle-password" (click)="togglePasswordVisibility()" [attr.aria-label]="showPassword ? 'Ocultar senha' : 'Mostrar senha'">
-            <i [class]="showPassword ? 'far fa-eye-slash' : 'far fa-eye'"></i>
-          </button>
-          
+          <div class="toggle-password-container">
+            <button type="button"
+                    class="toggle-password"
+                    (click)="togglePasswordVisibility()"
+                    [attr.aria-label]="showPassword ? 'Ocultar senha' : 'Mostrar senha'">
+              <i [class]="showPassword ? 'far fa-eye-slash' : 'far fa-eye'" aria-hidden="true"></i>
+            </button>
+          </div>
         </div>
         <div *ngIf="senha?.invalid && (senha?.touched || form.submitted)" class="error-message">
           <span *ngIf="senha?.errors?.['required']"><i class="fas fa-exclamation-circle"></i> Senha é obrigatória</span>
