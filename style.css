@@ -1,0 +1,220 @@
+:root{
+  --sidebar-w: 240px;
+  --sidebar-collapsed: 72px;
+  --nt-green: #1f8a3e;
+  --muted: #6b7280;
+  --bg: #f5fbf8;
+  --card-radius: 12px;
+  --soft-green: #e6f6ee; /* borda muito suave */
+}
+
+/* base */
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial;background:var(--bg);color:#0f1724}
+
+/* SIDEBAR */
+#sidebar{
+  position:fixed;
+  top:0; left:0; bottom:0;
+  width:var(--sidebar-w);
+  background:#fff;
+  border-right:1px solid var(--soft-green); /* linha verde suave */
+  display:flex; flex-direction:column;
+  transition:width .22s;
+  z-index:1200;
+}
+#sidebar.collapsed{width:var(--sidebar-collapsed)}
+.sidebar-top{padding:14px;border-bottom:1px solid rgba(0,0,0,0.03);}
+.logo-nt{width:44px;height:44px;border-radius:50%;background:var(--nt-green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.brand{font-weight:700;font-size:15px}
+.subtitle{font-size:12px;color:var(--muted)}
+
+/* NAV */
+.nav{margin-top:10px;padding-left:6px}
+.nav-link{display:flex;align-items:center;gap:10px;padding:10px 12px;margin:6px;border-radius:8px;color:#334155;font-size:15px;font-weight:500;text-decoration:none}
+.nav-link i{font-size:18px;width:22px;text-align:center;color:#6b7280}
+.nav-item .nav-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-link.active{background:linear-gradient(90deg, rgba(31,138,62,0.06), rgba(31,138,62,0.02));color:var(--nt-green);font-weight:600}
+
+/* bottom */
+.sidebar-bottom{margin-top:auto;padding:12px;border-top:1px solid rgba(0,0,0,0.03)}
+.logout{display:block;color:#ef4444;font-weight:600;padding-top:8px}
+
+/* TOP NAVBAR - ocupa a largura à direita da sidebar */
+.top-navbar{
+  position:fixed;
+  top:0;
+  left:var(--sidebar-w);
+  width:calc(100% - var(--sidebar-w));
+  height:64px;
+  background:#fff;
+  border-bottom:1px solid var(--soft-green); /* linha verde suave */
+  display:flex; align-items:center;
+  z-index:1100;
+  padding-left:24px;
+}
+
+/* MAIN area */
+#main{
+  margin-left:var(--sidebar-w);
+  padding-top:92px; /* espaço para navbar */
+  min-height:100vh;
+  padding-left:28px;
+  padding-right:28px;
+}
+
+/* STEPS (centralizados sobre o card) */
+.steps-wrap{display:flex;justify-content:center;margin-bottom:12px}
+.steps{display:flex;align-items:center;gap:36px}
+.step{position:relative; display:flex;flex-direction:column;align-items:center;gap:8px;color:#9aa3ad;font-size:14px}
+.step .circle{
+  width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;border:2px solid #d6eedd;background:#fff;color:#4b5563;
+  box-shadow:none;
+}
+.step.current .circle{background:var(--nt-green);color:#fff;border-color:var(--nt-green)}
+.step::after{
+  content:"";
+  position:absolute;
+  height:3px; width:48px;
+  background:#e6f6ee;
+  top:50%; left:calc(100% + 4px);
+}
+.step:last-child::after{display:none}
+.step .label{font-size:14px;color:#4b5563}
+
+/* shell-card: centralizado e tamanho max */
+.container-lg { max-width: 1100px; }
+.shell-card{
+  max-width: 920px;
+  margin:0 auto 60px;
+  border-radius:var(--card-radius);
+  box-shadow: 0 8px 24px rgba(15,23,42,0.06);
+  border:1px solid rgba(15,23,42,0.04);
+  background:#fff;
+  padding: 18px;
+}
+
+/* conteúdo do card */
+.card-body { padding: 18px; }
+.header-block .title{font-size:24px;font-weight:700}
+.header-block .subtitle{color:var(--muted);margin-top:6px}
+
+/* base-card */
+.base-card{
+  border-radius:10px;
+  border:1px solid rgba(15,23,42,0.06);
+  background:#fff;
+  transition: box-shadow .18s, transform .12s;
+}
+.base-card:hover{box-shadow:0 6px 20px rgba(15,23,42,0.06); transform: translateY(-3px); cursor:pointer}
+.base-title{font-weight:700;font-size:16px}
+.base-desc{color:var(--muted);font-size:14px}
+.base-badge{font-weight:700;font-size:12px;padding:0.25rem 0.55rem;border-radius:999px}
+
+/* CONTINUE (barrão verde como original) */
+.continue-btn{
+  width:60%; /* como na imagem: não inteira, centralizada, mas grande */
+  max-width:560px;
+  min-width:220px;
+  background: #8fc6a6; /* tom suave */
+  color:#fff;
+  border:none;
+  padding:12px 24px;
+  border-radius:20px;
+  font-weight:700;
+}
+.continue-btn:disabled{opacity:.6;cursor:not-allowed}
+
+/* responsivo */
+@media (max-width: 992px){
+  .top-navbar{left:0;width:100%}
+  #sidebar{transform:translateX(-100%);position:fixed;z-index:1300}
+  #main{margin-left:0;padding-top:110px}
+  .continue-btn{width:100%}
+}
+
+/* Steps (pixel-precise) */
+:root{
+  --step-size: 40px;            /* diâmetro do círculo */
+  --step-border: 3px;           /* espessura do anel dos círculos inativos */
+  --step-gap: 56px;             /* distância entre centros dos passos */
+  --connector-width: 44px;      /* comprimento da linha entre círculos */
+  --connector-height: 2px;
+  --connector-color: rgba(41,128,81,0.12); /* linha sutil */
+  --step-inactive-border: rgba(31,138,62,0.18); /* anel verde claro */
+  --step-label-color: #4b5563;
+  --step-active-bg: var(--nt-green);
+}
+
+/* container */
+.steps-wrap{display:flex;justify-content:center;margin-bottom:12px}
+.steps{display:flex;align-items:center;gap:var(--step-gap); position:relative;}
+
+/* cada passo */
+.step{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  min-width: var(--step-size);
+}
+
+/* conector entre passos (criado pela pseudo para cada passo, exceto o último) */
+.step:not(:last-child)::after{
+  content: "";
+  position:absolute;
+  top: 50%;
+  left: calc(100% + 6px); /* desloca um pouco do círculo */
+  transform: translateY(-50%);
+  width: var(--connector-width);
+  height: var(--connector-height);
+  background: var(--connector-color);
+  border-radius: 2px;
+  z-index: 1;
+}
+
+/* círculo */
+.step .circle{
+  width: var(--step-size);
+  height: var(--step-size);
+  border-radius: 50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  font-size:15px;
+  line-height:1;
+  box-shadow:none;
+  background: #ffffff;                      /* fundo branco */
+  color: #374151;                           /* número cinza escuro por padrão */
+  border: var(--step-border) solid var(--step-inactive-border); /* anel dos inativos */
+  z-index: 2; /* acima do conector */
+}
+
+/* passo ativo (preenchido) */
+.step.current .circle{
+  background: var(--step-active-bg);
+  color: #fff;
+  border-color: var(--step-active-bg);
+}
+
+/* quando passo não-ativo e queremos enfatizar (por hover/focus) */
+.step:hover .circle{
+  box-shadow: 0 6px 12px rgba(15,23,42,0.06);
+  transform: translateY(-1px);
+}
+
+/* label (texto embaixo) */
+.step .label{
+  font-size:13px;
+  color: var(--step-label-color);
+  margin-top:6px;
+  text-align:center;
+}
+
+/* label do passo atual em cor verde */
+.step.current .label{
+  color: var(--nt-green);
+  font-weight:600;
+}
