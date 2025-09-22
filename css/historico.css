@@ -1,0 +1,75 @@
+/* =============================================== */
+/* ESTILOS COMUNS (Base para todas as páginas)     */
+/* =============================================== */
+:root {
+  --sidebar-w: 240px;
+  --nt-green: #1f8a3e;
+  --muted: #6b7280;
+  --bg: #f8fbf9;
+  --card-radius: 12px;
+  --soft-green: #e6f6ee;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--bg); color: #0f1724; }
+
+/* --- Sidebar --- */
+#sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); background: #fff; border-right: 1px solid var(--soft-green); display: flex; flex-direction: column; z-index: 1200; }
+.sidebar-top { padding: 1rem; border-bottom: 1px solid var(--soft-green); }
+.logo-nt { width: 44px; height: 44px; border-radius: 50%; background: var(--nt-green); color: #fff; display: flex; align-items-center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+.brand { font-weight: 700; font-size: 15px; }
+.subtitle { font-size: 12px; color: var(--muted); }
+.nav-heading { font-size: 0.75rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; padding: 0.5rem 1rem; letter-spacing: .5px; }
+.nav-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; margin: 2px 8px; border-radius: 8px; color: #334155; font-size: 15px; font-weight: 500; text-decoration: none; }
+.nav-link i { font-size: 18px; width: 22px; text-align: center; color: #6b7280; }
+.nav-link:hover { background: #f8fafc; }
+.nav-link.active { background: var(--soft-green); color: var(--nt-green); font-weight: 600; }
+.nav-link.active i { color: var(--nt-green); }
+.sidebar-bottom { margin-top: auto; border-top: 1px solid var(--soft-green); }
+.logout { color: #ef4444; font-weight: 600; text-decoration: none; font-size: 15px; border-radius: 8px; padding: 10px 14px; }
+.logout:hover { background-color: #fef2f2; }
+
+/* --- Layout Principal --- */
+#main { margin-left: var(--sidebar-w); }
+.mobile-header { position: sticky; top: 0; height: 60px; background: #fff; border-bottom: 1px solid var(--soft-green); display: flex; align-items: center; padding: 0 1rem; z-index: 1050; }
+#sidebar-toggle { font-size: 1.75rem; color: #334155; }
+#sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 1199; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+#sidebar-overlay.is-visible { opacity: 1; visibility: visible; }
+@media (max-width: 991.98px) {
+  #sidebar { transform: translateX(-100%); transition: transform 0.3s ease-in-out; }
+  #sidebar.is-open { transform: translateX(0); box-shadow: 0 0 25px rgba(0,0,0,0.1); }
+  #main { margin-left: 0; }
+  #main .container-fluid { padding-top: 1rem !important; }
+}
+
+/* =============================================== */
+/* ESTILOS ESPECÍFICOS PARA historico.html         */
+/* =============================================== */
+.history-item.card {
+  border: 1px solid #e2e8f0;
+  border-radius: var(--card-radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  background-color: #fff;
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+.history-item.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+.card-title { font-weight: 600; font-size: 1.1rem; color: #1e293b; }
+
+.badge-base, .badge-status {
+  font-size: 0.75rem; font-weight: 500; padding: 0.3em 0.8em;
+  border-radius: 999px; border: 1px solid transparent;
+}
+.badge-base.usda { background-color: #eef2ff; color: #4338ca; border-color: #c7d2fe; }
+.badge-base.taco { background-color: var(--soft-green); color: var(--nt-green); border-color: #a3d9b8; }
+.badge-status.finalizada { background-color: var(--soft-green); color: var(--nt-green); border-color: #a3d9b8; }
+.badge-status.rascunho { background-color: #f3f4f6; color: #4b5563; border-color: #d1d5db; }
+
+.action-link {
+  color: var(--muted); text-decoration: none; font-size: 0.875rem; font-weight: 500;
+  display: inline-flex; align-items: center; gap: 6px; transition: color 0.2s;
+}
+.action-link:hover { color: var(--nt-green); }
+.action-link.text-danger:hover { color: #dc3545; filter: brightness(0.9); }
+.action-link i { font-size: 1rem; }
