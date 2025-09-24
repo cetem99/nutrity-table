@@ -8,53 +8,38 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="css/criar_tabela.css">
 </head>
-
 <body>
   <div id="sidebar-overlay"></div>
   <div id="app">
     <aside id="sidebar">
       <div class="sidebar-top px-3 py-3 d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center">
-          <div class="logo-nt">NT</div>
-          <div class="ms-2">
-            <div class="brand">NutriTable</div>
-            <div class="subtitle">Gerador de Tabelas</div>
-          </div>
-        </div>
+        <div class="d-flex align-items-center"><img src="imagens/icone-usuário.jpg" class="img_usuario" alt="Avatar do usuário"><div class="ms-2"><div class="brand">Usuário</div></div></div>
         <button class="btn-close d-lg-none" id="sidebar-close"></button>
       </div>
-      
-      <nav class="nav flex-column mt-2 px-2" role="navigation">
-        <span class="nav-heading">Principal</span>
-        <a href="criar_tabela.html" class="nav-item nav-link active"><i class="bi bi-plus-circle-fill"></i><span class="nav-text">Nova Tabela</span></a>
-        <a href="historico.html" class="nav-item nav-link"><i class="bi bi-clock-history"></i><span class="nav-text">Histórico</span></a>
-        <a href="#" class="nav-item nav-link"><i class="bi bi-robot"></i><span class="nav-text">Análise IA</span></a>
-        <a href="#" class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i><span class="nav-text">Dashboard</span></a>
-        
-        <span class="nav-heading mt-3">Conta</span>
-        <a href="#" class="nav-item nav-link"><i class="bi bi-person"></i><span class="nav-text">Perfil</span></a>
-        <a href="#" class="nav-item nav-link"><i class="bi bi-gear"></i><span class="nav-text">Configurações</span></a>
-      </nav>
-
-      <div class="sidebar-bottom p-3">
-        <a href="#" class="logout d-block text-danger mt-2"><i class="bi bi-box-arrow-left me-2"></i>Sair</a>
-      </div>
+      <nav class="nav flex-column mt-2 px-2" role="navigation"><span class="nav-heading">Principal</span><a href="criar_tabela.html" class="nav-item nav-link active"><i class="bi bi-plus-circle-fill"></i><span class="nav-text">Nova Tabela</span></a><a href="historico.html" class="nav-item nav-link"><i class="bi bi-clock-history"></i><span class="nav-text">Histórico</span></a><a href="dashboard.html" class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i><span class="nav-text">Dashboard</span></a><span class="nav-heading mt-3">Conta</span><a href="#" class="nav-item nav-link"><i class="bi bi-person"></i><span class="nav-text">Perfil</span></a><a href="#" class="nav-item nav-link"><i class="bi bi-gear"></i><span class="nav-text">Configurações</span></a></nav>
+      <div class="sidebar-bottom p-3"><a href="#" class="logout d-block text-danger mt-2"><i class="bi bi-box-arrow-left me-2"></i>Sair</a></div>
     </aside>
 
     <main id="main">
-      <nav class="top-navbar">
-        <div class="container-fluid"><span class="navbar-brand mb-0 h1">NutriTable</span></div>
+      <header class="mobile-header d-lg-none">
+        <button class="btn" id="sidebar-toggle"><i class="bi bi-list"></i></button>
+        <div class="mobile-logo">
+            <div class="logo-nt">NT</div>
+            <div class="brand ms-2">NutriTable</div>
+        </div>
+      </header>
+
+      <nav class="top-navbar d-none d-lg-flex">
+        <div class="logo-nt">NT</div>
+        <div class="ms-3"><div class="brand">NutrifyTable</div><div class="subtitle">Gerador de Tabelas</div></div>
       </nav>
 
       <div class="main-content container-lg">
         <div class="steps-wrap">
           <div class="steps">
-            <div class="step current" data-step="1"><div class="circle">1</div><div class="label">Base</div></div>
-            <div class="step" data-step="2"><div class="circle">2</div><div class="label">Lista</div></div>
-            <div class="step" data-step="3"><div class="circle">3</div><div class="label">Tabela</div></div>
+            <div class="step current" data-step="1"><div class="circle">1</div><div class="label">Base</div></div><div class="step" data-step="2"><div class="circle">2</div><div class="label">Lista</div></div><div class="step" data-step="3"><div class="circle">3</div><div class="label">Tabela</div></div>
           </div>
         </div>
-
         <div class="shell-card">
           <div id="step-1" class="step-content">
             <div class="text-center mb-4"><h2 class="h3">Escolha a Base de Dados</h2><p class="text-muted">Selecione qual base nutricional usar para os cálculos</p></div>
@@ -76,7 +61,6 @@
             <div class="d-flex justify-content-between"><button class="btn btn-light btn-prev"><i class="bi bi-arrow-left"></i> Voltar</button><button class="btn btn-success"><i class="bi bi-check-circle-fill"></i> Gerar Tabela</button></div>
           </div>
         </div>
-      </div>
     </main>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

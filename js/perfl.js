@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+  // --- CONTROLE DA SIDEBAR ---
   const sidebar = document.getElementById('sidebar');
   const sidebarToggle = document.getElementById('sidebar-toggle');
   const sidebarClose = document.getElementById('sidebar-close');

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // --- CONTROLE DA SIDEBAR (Necessário em ambas as páginas) ---
+  // --- CONTROLE DA SIDEBAR ---
   const sidebar = document.getElementById('sidebar');
   const sidebarToggle = document.getElementById('sidebar-toggle');
   const sidebarClose = document.getElementById('sidebar-close');
@@ -115,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (addIngredientBtn) {
     addIngredientBtn.addEventListener('click', addIngredientRow);
+    // Inicia com 3 linhas de ingredientes
     for(let i=0; i<3; i++) { addIngredientRow(); }
   }
   
