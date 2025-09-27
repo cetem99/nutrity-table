@@ -10,9 +10,9 @@
   --border-color: #e2e8f0;
   --soft-green-bg: #e6f6ee;
   
-  /* Cores Globais */
-  --sidebar-w: 240px;
-  --navbar-h: 64px;
+  /* Cores Globais e AJUSTE de 90% */
+  --sidebar-w: 216px; /* Original: 240px */
+  --navbar-h: 58px;  /* Original: 64px */
   --nt-green: #1f8a3e;
   --card-radius: 12px;
 }
@@ -24,6 +24,11 @@
   --text-muted: #94a3b8;
   --border-color: #334155;
   --soft-green-bg: #163426;
+}
+
+/* AJUSTE PRINCIPAL: Diminui a escala de todo o site em 10% */
+html {
+  font-size: 90%;
 }
 
 /* =============================================== */
@@ -51,15 +56,15 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 }
 .sidebar-top { padding: 1rem; border-bottom: 1px solid var(--border-color); }
 .img_usuario { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-.brand { font-weight: 700; font-size: 15px; color: var(--text-primary); }
-.subtitle { font-size: 12px; color: var(--text-muted); }
-.nav-heading { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; padding: 0.5rem 1rem; letter-spacing: .5px; }
-.nav-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; margin: 2px 8px; border-radius: 8px; color: var(--text-muted); font-size: 15px; font-weight: 500; text-decoration: none; }
-.nav-link i { font-size: 18px; width: 22px; text-align: center; }
+.brand { font-weight: 700; font-size: 1.1rem; color: var(--text-primary); }
+.subtitle { font-size: 1rem; color: var(--text-muted); }
+.nav-heading { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; padding: 0.5rem 1rem; letter-spacing: .5px; }
+.nav-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; margin: 2px 8px; border-radius: 8px; color: var(--text-muted); font-size: 1.1rem; font-weight: 500; text-decoration: none; }
+.nav-link i { font-size: 1.2rem; width: 22px; text-align: center; }
 .nav-link:hover { background: rgba(127,127,127, 0.08); }
 .nav-link.active { background: var(--soft-green-bg); color: var(--nt-green); font-weight: 600; }
 .sidebar-bottom { margin-top: auto; border-top: 1px solid var(--border-color); }
-.logout { color: #ef4444; font-weight: 600; text-decoration: none; }
+.logout { color: #ef4444; font-weight: 600; text-decoration: none; font-size: 1.1rem; }
 .logo-nt { width: 44px; height: 44px; border-radius: 50%; background: var(--nt-green); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
 
 /* --- Layout Principal --- */
@@ -68,12 +73,17 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 .mobile-header { display: none; }
 #sidebar-overlay { display: none; }
 @media (max-width: 991.98px) {
+  /* AJUSTE: Voltamos a 100% de escala para legibilidade no celular */
+  html {
+    font-size: 90%;
+  }
+
   #sidebar { transform: translateX(-100%); transition: transform 0.3s ease-in-out; }
   #sidebar.is-open { transform: translateX(0); box-shadow: 0 0 25px rgba(0,0,0,0.1); }
   .mobile-header { position: fixed; top: 0; left: 0; right: 0; height: 60px; display: flex; align-items: center; padding: 0 1rem; z-index: 1050; gap: 1rem; }
   .mobile-logo { display: flex; align-items: center; }
   .mobile-logo .logo-nt { width: 36px; height: 36px; font-size: 0.9rem; }
-  #sidebar-toggle { font-size: 1.75rem; color: var(--text-primary); } /* <- CORREÇÃO APLICADA AQUI */
+  #sidebar-toggle { font-size: 1.75rem; color: var(--text-primary); }
   #sidebar-overlay { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1199; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; background-color: rgba(0,0,0,0.5); }
   #sidebar-overlay.is-visible { opacity: 1; visibility: visible; }
   #main { margin-left: 0; padding-top: 60px; }
