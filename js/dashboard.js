@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if(sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
   if(overlay) overlay.addEventListener('click', closeSidebar);
 
+
   // --- LÓGICA DOS GRÁFICOS DO DASHBOARD ---
 
   // Gráfico de Pizza (Ingredientes)

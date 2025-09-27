@@ -5,21 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const sidebarClose = document.getElementById('sidebar-close');
   const overlay = document.getElementById('sidebar-overlay');
 
-  function openSidebar() {
-    if (sidebar && overlay) {
-      sidebar.classList.add('is-open');
-      overlay.classList.add('is-visible');
-    }
-  }
-  function closeSidebar() {
-    if (sidebar && overlay) {
-      sidebar.classList.remove('is-open');
-      overlay.classList.remove('is-visible');
-    }
-  }
-  if(sidebarToggle) sidebarToggle.addEventListener('click', openSidebar);
-  if(sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
-  if(overlay) overlay.addEventListener('click', closeSidebar);
+  if(sidebarToggle) sidebarToggle.addEventListener('click', () => { sidebar.classList.add('is-open'); overlay.classList.add('is-visible'); });
+  if(sidebarClose) sidebarClose.addEventListener('click', () => { sidebar.classList.remove('is-open'); overlay.classList.remove('is-visible'); });
+  if(overlay) overlay.addEventListener('click', () => { sidebar.classList.remove('is-open'); overlay.classList.remove('is-visible'); });
 
   // --- LÓGICA DA NOVA TABELA MULTI-ETAPAS ---
   let currentStep = 1;
@@ -74,49 +62,53 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
+  // --- ETAPA 2: Adicionar Ingredientes (ATUALIZADO) ---
   const addIngredientBtn = document.getElementById('add-ingredient-btn');
   const ingredientList = document.getElementById('ingredient-list');
-  let ingredientCount = 0;
 
   function addIngredientRow() {
-    ingredientCount++;
+    const ingredientCount = ingredientList.children.length + 1;
     const row = document.createElement('div');
     row.classList.add('ingredient-row');
     row.innerHTML = `
-      <div>
-        ${ingredientCount === 1 ? '<label class="form-label small">Ingrediente ' + ingredientCount + '</label>' : ''}
-        <input type="text" class="form-control" placeholder="Ex: Farinha de trigo">
-      </div>
-      <div>
-        ${ingredientCount === 1 ? '<label class="form-label small">Qtd.</label>' : ''}
-        <input type="number" class="form-control" value="0">
-      </div>
-      <div>
-        ${ingredientCount === 1 ? '<label class="form-label small">Unidade</label>' : ''}
-        <select class="form-select"><option>g</option><option>ml</option><option>un</option></select>
-      </div>
-      <div>
-        ${ingredientCount === 1 ? '<label class="form-label small invisible">Ação</label>' : ''}
-        <button class="btn btn-outline-danger btn-sm remove-ingredient-btn"><i class="bi bi-x-lg"></i></button>
-      </div>
+        <div class="ingredient-name-col">
+            <label class="form-label d-md-none">Ingrediente ${ingredientCount}</label>
+            <input type="text" class="form-control" placeholder="Ex: Farinha de trigo">
+        </div>
+        <div>
+            <label class="form-label d-md-none">Qtd.</label>
+            <input type="number" class="form-control" value="0">
+        </div>
+        <div>
+            <label class="form-label d-md-none">Unidade</label>
+            <select class="form-select">
+                <option>g</option>
+                <option>ml</option>
+                <option>un</option>
+            </select>
+        </div>
+        <div class="ingredient-action-col">
+            <button class="btn btn-outline-danger w-100 remove-ingredient-btn"><i class="bi bi-x-lg"></i></button>
+        </div>
     `;
     if (ingredientList) {
-      ingredientList.appendChild(row);
+        ingredientList.appendChild(row);
     }
   }
 
   if (ingredientList) {
     ingredientList.addEventListener('click', function(e) {
-      if (e.target.closest('.remove-ingredient-btn')) {
-        e.target.closest('.ingredient-row').remove();
-      }
+        if (e.target.closest('.remove-ingredient-btn')) {
+            e.target.closest('.ingredient-row').remove();
+        }
     });
   }
 
   if (addIngredientBtn) {
     addIngredientBtn.addEventListener('click', addIngredientRow);
-    // Inicia com 3 linhas de ingredientes
-    for(let i=0; i<3; i++) { addIngredientRow(); }
+    for (let i = 0; i < 3; i++) {
+        addIngredientRow();
+    }
   }
   
   updateStepUI();

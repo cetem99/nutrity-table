@@ -79,3 +79,49 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
   .shell-card { padding: 1.5rem; }
   .ingredient-row { grid-template-columns: 1fr; }
 }
+
+/* Define o layout em grid para as linhas */
+.ingredient-row {
+  display: grid;
+  gap: 0.75rem;
+  align-items: flex-end;
+  margin-bottom: 0.75rem;
+}
+
+/* Layout para Telas Maiores (Desktop) */
+@media (min-width: 768px) {
+  .ingredient-row {
+    /* Colunas: Ingrediente (flexível), Qtd, Unidade, Botão (fixos) */
+    grid-template-columns: 1fr 100px 120px 50px;
+  }
+}
+
+/* Layout para Telas Menores (Mobile) */
+@media (max-width: 767.98px) {
+  .ingredient-row {
+    /* Duas colunas para os campos menores */
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--bs-border-color);
+    padding-top: 1rem;
+  }
+  .ingredient-row:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  /* Faz o input de "Ingrediente" ocupar a linha inteira */
+  .ingredient-row .ingredient-name-col {
+    grid-column: 1 / -1;
+  }
+
+  /* Coloca o botão de excluir na última coluna da segunda linha */
+  .ingredient-row .ingredient-action-col {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    justify-self: flex-end;
+  }
+
+  .ingredient-row .form-label {
+      margin-bottom: 0.25rem;
+  }
+}
