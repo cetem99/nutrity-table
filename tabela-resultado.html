@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NutriTable — Resultado da Tabela</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/tabela-resultado.css">
+
+  <script src="js/theme.js"></script>
+</head>
+<body>
+  <div id="sidebar-overlay"></div>
+  <div id="app">
+    <aside id="sidebar">
+      <div class="sidebar-top px-3 py-3 d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center"><img src="imagens/icone-usuário.jpg" class="img_usuario"
+            id="sidebarUserImage" alt="Avatar do usuário">
+          <div class="ms-2">
+            <div class="brand">Usuário</div>
+          </div>
+        </div>
+        <button class="btn-close d-lg-none" id="sidebar-close"></button>
+      </div>
+      <nav class="nav flex-column mt-2 px-2" role="navigation"><span class="nav-heading">Principal</span><a
+          href="criar_tabela.html" class="nav-item nav-link"><i class="bi bi-plus-circle-fill"></i><span
+            class="nav-text">Nova Tabela</span></a><a href="historico.html" class="nav-item nav-link active"><i
+            class="bi bi-clock-history"></i><span class="nav-text">Histórico</span></a><a href="dashboard.html"
+          class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i><span
+            class="nav-text">Dashboard</span></a><span class="nav-heading mt-3">Conta</span><a href="perfil.html"
+          class="nav-item nav-link"><i class="bi bi-person"></i><span class="nav-text">Perfil</span></a><a
+          href="configuracoes.html" class="nav-item nav-link"><i class="bi bi-gear"></i><span
+            class="nav-text">Configurações</span></a></nav>
+      <div class="sidebar-bottom p-3"><a href="#" class="logout d-block text-danger mt-2"><i
+            class="bi bi-box-arrow-left me-2"></i>Sair</a></div>
+    </aside>
+    <main id="main">
+      <header class="mobile-header d-lg-none">
+        <button class="btn" id="sidebar-toggle"><i class="bi bi-list"></i></button>
+        <div class="mobile-logo">
+          <div class="logo-nt">NT</div>
+          <div class="brand ms-2">NutriTable</div>
+        </div>
+      </header>
+      <nav class="top-navbar d-none d-lg-flex">
+        <div class="logo-nt">NT</div>
+        <div class="ms-3">
+          <div class="brand">NutrifyTable</div>
+          <div class="subtitle">Gerador de Tabelas</div>
+        </div>
+      </nav>
+      <div class="main-content container-fluid p-4">
+        <div class="result-container">
+          <header class="d-flex flex-column flex-md-row justify-content-between align-items-start mb-4">
+            <div>
+              <h1 class="h2 mb-1" id="product-title">Bolo de Milho</h1>
+              <p class="text-body-secondary">Tabela nutricional gerada em 26/09/2025</p>
+            </div>
+            <div class="d-flex gap-2 mt-2 mt-md-0 flex-wrap">
+              <button class="btn btn-outline-secondary"><i class="bi bi-pencil me-1"></i> Editar</button>
+              <button class="btn btn-outline-secondary" id="export-pdf-btn"><i class="bi bi-file-earmark-pdf me-1"></i>
+                Exportar PDF</button>
+              <button class="btn btn-outline-secondary" id="export-csv-btn"><i class="bi bi-download me-1"></i> Exportar
+                CSV</button>
+              <button class="btn btn-success"><i class="bi bi-check-circle me-1"></i> Salvar</button>
+            </div>
+          </header>
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title text-body">Ajustar Porção</h5>
+
+              <p class="card-subtitle text-body-secondary mb-3">Valores serão recalculados automaticamente</p>
+
+              <div style="max-width: 200px;">
+                <label for="portion" class="form-label text-body">Porção (g)</label>
+
+                <input type="number" id="portion" class="form-control" value="50">
+                <div class="form-text">Base: 100g = 420 kcal</div>
+              </div>
+            </div>
+          </div>
+
+          <h4 class="mb-3">Informação Nutricional</h4>
+
+          <div class="anvisa-seal mb-4">
+            <svg class="seal-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z">
+              </path>
+              <path d="M12 10h-2v2H9v-2H7V9h2V7h1v2h2v1z"></path>
+            </svg>
+            <div>
+              <div class="seal-title">ALTO EM</div>
+              <div class="seal-nutrient">AÇÚCAR ADICIONADO</div>
+            </div>
+          </div>
+
+          <div id="nutritional-table-data" class="card nutritional-table">
+            <div class="card-body">
+              <div class="table-header">
+                <div>
+                  <h5 class="fw-bold">INFORMAÇÃO NUTRICIONAL</h5>
+                </div>
+                <div class="d-flex flex-wrap gap-2 justify-content-start justify-content-md-end">
+                  <span class="badge text-bg-light">CONTÉM GLÚTEN</span>
+                  <span class="badge text-bg-light">FONTE DE FIBRAS</span>
+                </div>
+              </div>
+              <p class="mt-2">Porções por embalagem: -- <br> Porção: 50 g</p>
+              <div class="table-grid header-row">
+                <div class="fw-bold">Informação</div>
+                <div class="fw-bold text-end">100 g</div>
+                <div class="fw-bold text-end">Porção</div>
+                <div class="fw-bold text-end">%VD*</div>
+              </div>
+              <div class="table-grid data-row" data-nutrient="Valor energético (kcal)" data-100g="420"
+                data-portion="210" data-vd="11">
+                <div>Valor energético (kcal)</div>
+                <div class="text-end">420 kcal</div>
+                <div class="text-end">210 kcal</div>
+                <div class="text-end">11%</div>
+              </div>
+              <div class="table-grid data-row" data-nutrient="Carboidratos (g)" data-100g="65" data-portion="33"
+                data-vd="11">
+                <div>Carboidratos (g)</div>
+                <div class="text-end">65 g</div>
+                <div class="text-end">33 g</div>
+                <div class="text-end">11%</div>
+              </div>
+              <div class="table-grid data-row indented" data-nutrient="Açúcares totais (g)" data-100g="15"
+                data-portion="8" data-vd="-">
+                <div>Açúcares totais (g)</div>
+                <div class="text-end">15 g</div>
+                <div class="text-end">8 g</div>
+                <div class="text-end">-</div>
+              </div>
+              <div class="table-grid data-row indented" data-nutrient="Açúcares adicionados (g)" data-100g="8"
+                data-portion="4" data-vd="8">
+                <div>Açúcares adicionados (g)</div>
+                <div class="text-end">8 g</div>
+                <div class="text-end">4 g</div>
+                <div class="text-end">8%</div>
+              </div>
+              <div class="table-grid data-row" data-nutrient="Proteínas (g)" data-100g="9" data-portion="4.5"
+                data-vd="6">
+                <div>Proteínas (g)</div>
+                <div class="text-end">9 g</div>
+                <div class="text-end">4,5 g</div>
+                <div class="text-end">6%</div>
+              </div>
+              <div class="table-grid data-row" data-nutrient="Gorduras totais (g)" data-100g="14" data-portion="7"
+                data-vd="13">
+                <div>Gorduras totais (g)</div>
+                <div class="text-end">14 g</div>
+                <div class="text-end">7 g</div>
+                <div class="text-end">13%</div>
+              </div>
+              <div class="table-grid data-row indented" data-nutrient="Gorduras saturadas (g)" data-100g="6"
+                data-portion="3" data-vd="14">
+                <div>Gorduras saturadas (g)</div>
+                <div class="text-end">6 g</div>
+                <div class="text-end">3 g</div>
+                <div class="text-end">14%</div>
+              </div>
+              <div class="table-grid data-row indented" data-nutrient="Gorduras trans (g)" data-100g="0"
+                data-portion="0" data-vd="-">
+                <div>Gorduras trans (g)</div>
+                <div class="text-end">0 g</div>
+                <div class="text-end">0 g</div>
+                <div class="text-end">-</div>
+              </div>
+              <div class="table-grid data-row no-border" data-nutrient="Fibras alimentares (g)" data-100g="5"
+                data-portion="2.5" data-vd="10">
+                <div>Fibras alimentares (g)</div>
+                <div class="text-end">5 g</div>
+                <div class="text-end">2,5 g</div>
+                <div class="text-end">10%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="js/tabela-resultado.js"></script>
+</body>
+
+</html>

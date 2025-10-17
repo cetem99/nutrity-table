@@ -1,0 +1,329 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+/* Container principal */
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Lado esquerdo - Imagem */
+.left-side {
+  display: none;
+}
+
+.left-side img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+
+@media (min-width: 1280px) {
+  .container {
+    position: relative;
+    display: flex;
+    min-height: 100vh;
+  }
+}
+
+
+
+/* Lado direito - Login */
+.right-side {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  /* sem borda em telas pequenas */
+}
+
+.login-box {
+  width: 100%;
+  min-width: 350px;
+  max-width: 400px;
+  border-radius: 16px;
+  background: white;
+  padding: 2.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Layout sobreposto a partir de 768px (imagem em toda a largura + painel à direita) */
+@media (min-width: 768px) {
+  .container {
+    position: relative;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Imagem de fundo (lado esquerdo) */
+  .left-side {
+    display: block;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
+
+  .left-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Painel branco sobreposto (lado direito) */
+  .right-side {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    max-width: 450px; /* largura máxima do painel */
+    width: 100%;
+    background: white;
+    border-left: 8px solid #008B1D;
+    border-top-left-radius: 80px;
+    border-bottom-left-radius: 80px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    box-shadow: -8px 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .login-box {
+    width: 100%;
+    max-width: 360px;
+    background: transparent;
+    box-shadow: none;
+  }
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.icon {
+  width: 64px;
+  height: 64px;
+  background: rgba(0, 128, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon i {
+  color: #008B1D;
+  width: 32px;
+  height: 32px;
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #008B1D;
+  border-color: #008B1D;
+}
+
+input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1;
+}
+
+/* Cabeçalho */
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #222;
+}
+
+.header p {
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+/* Campos */
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.field label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: #333;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper i {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  width: 20px;
+  height: 20px;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 10px 36px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-wrapper input:focus {
+  border-color: #008B1D;
+}
+
+.input-wrapper button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+/* Opções */
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.options a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.options a:hover {
+  text-decoration: underline;
+}
+
+/* Botão */
+.btn {
+  width: 100%;
+  background: #008B1D;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.9rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn:hover {
+  background: #007016;
+}
+
+/* Cadastro */
+.signup {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  color: #6b7280;
+}
+
+.signup a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signup a:hover {
+  text-decoration: underline;
+}
+
+/* Estilos para o ícone circular */
+
+.input-wrapper i,
+.input-wrapper svg {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #6b7280;
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+
+.input-wrapper svg {
+  pointer-events: none;
+}
+
+/* Estilos para a imagem dentro do ícone */
+.icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-wrapper svg {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 10px 10px 10px 40px; /* espaço pro ícone */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+}
