@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NutriTable — Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <script src="js/theme.js"></script>
+</head>
+
+<body>
+  <div id="sidebar-overlay"></div>
+  <div id="app">
+    <aside id="sidebar">
+      <div class="sidebar-top px-3 py-3 d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center"><img src="imagens/icone-usuário.jpg" class="img_usuario"
+            id="sidebarUserImage" alt="Avatar do usuário">
+          <div class="ms-2">
+            <div class="brand">Usuário</div>
+          </div>
+        </div>
+        <button class="btn-close d-lg-none" id="sidebar-close"></button>
+      </div>
+      <nav class="nav flex-column mt-2 px-2" role="navigation">
+        <span class="nav-heading">Principal</span>
+        <a href="criar_tabela.html" class="nav-item nav-link"><i class="bi bi-plus-circle-fill"></i><span
+            class="nav-text">Nova Tabela</span></a>
+        <a href="historico.html" class="nav-item nav-link"><i class="bi bi-clock-history"></i><span
+            class="nav-text">Histórico</span></a>
+        <a href="dashboard.html" class="nav-item nav-link active"><i class="bi bi-bar-chart-line-fill"></i><span
+            class="nav-text">Dashboard</span></a>
+        <span class="nav-heading mt-3">Conta</span>
+        <a href="perfil.html" class="nav-item nav-link"><i class="bi bi-person"></i><span
+            class="nav-text">Perfil</span></a>
+        <a href="configuracoes.html" class="nav-item nav-link"><i class="bi bi-gear"></i><span class="nav-text">Configurações</span></a>
+      </nav>
+      <div class="sidebar-bottom p-3">
+        <a href="#" class="logout d-block text-danger mt-2"><i class="bi bi-box-arrow-left me-2"></i>Sair</a>
+      </div>
+    </aside>
+
+    <main id="main">
+      <header class="mobile-header d-lg-none">
+        <button class="btn" id="sidebar-toggle"><i class="bi bi-list"></i></button>
+        <div class="mobile-logo">
+          <div class="logo-nt">NT</div>
+          <div class="brand ms-2">NutriTable</div>
+        </div>
+      </header>
+      <nav class="top-navbar d-none d-lg-flex">
+        <div class="logo-nt">NT</div>
+        <div class="ms-3">
+          <div class="brand">NutrifyTable</div>
+          <div class="subtitle">Gerador de Tabelas</div>
+        </div>
+      </nav>
+
+      <div class="main-content container-fluid p-4">
+        <header class="main-header mb-4">
+          <h1 class="h2">Dashboard</h1>
+          <p class="text-muted">Insights sobre suas tabelas nutricionais criadas</p>
+        </header>
+
+        <div class="row g-4 mb-4">
+          <div class="col-md-4">
+            <div class="card stat-card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="stat-content">
+                    <p class="stat-label text-muted mb-1">Total de Tabelas</p>
+                    <h3 class="stat-value">12</h3>
+                  </div><i class="bi bi-file-earmark-text stat-icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card stat-card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="stat-content">
+                    <p class="stat-label text-muted mb-1">Este Mês</p>
+                    <h3 class="stat-value">5</h3>
+                  </div><i class="bi bi-calendar-month stat-icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card stat-card">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="stat-content">
+                    <p class="stat-label text-muted mb-1">Última Atividade</p>
+                    <h3 class="stat-value">2 horas atrás</h3>
+                  </div><i class="bi bi-clock-history stat-icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+          <div class="col-lg-3 col-md-6">
+            <div class="card detail-card">
+              <div class="card-body">
+                <p class="detail-label text-muted">Ingredientes Únicos</p>
+                <h2 class="detail-value">156</h2>
+                <p class="detail-change text-success mb-0"><i class="bi bi-arrow-up-right"></i> +6% vs mês anterior</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="card detail-card">
+              <div class="card-body">
+                <p class="detail-label text-muted">Base Mais Usada</p>
+                <h2 class="detail-value">TACO</h2>
+                <p class="detail-subtext mb-0">61% das tabelas</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="card detail-card">
+              <div class="card-body">
+                <p class="detail-label text-muted">PDFs Exportados</p>
+                <h2 class="detail-value">18</h2>
+                <p class="detail-subtext text-primary mb-0">78% das tabelas</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="card detail-card">
+              <div class="card-body">
+                <p class="detail-label text-muted">Taxa de Sucesso</p>
+                <h2 class="detail-value">94%</h2>
+                <p class="detail-change text-success mb-0"><i class="bi bi-arrow-up-right"></i> +2% vs mês anterior</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-lg-5">
+            <div class="card chart-card">
+              <div class="card-header">Ingredientes Mais Utilizados</div>
+              <div class="card-body"><canvas id="ingredientsChart"></canvas></div>
+            </div>
+          </div>
+          <div class="col-lg-7">
+            <div class="card chart-card">
+              <div class="card-header">Categorias de Produtos</div>
+              <div class="card-body"><canvas id="categoriesChart"></canvas></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+
+</html>

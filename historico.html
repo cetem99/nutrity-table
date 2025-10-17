@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NutriTable — Histórico</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/historico.css">
+  <script src="js/theme.js"></script>
+</head>
+
+<body>
+  <div id="sidebar-overlay"></div>
+  <div id="app">
+    <aside id="sidebar">
+      <div class="sidebar-top px-3 py-3 d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center"><img src="imagens/icone-usuário.jpg" class="img_usuario"
+            id="sidebarUserImage" alt="Avatar do usuário">
+          <div class="ms-2">
+            <div class="brand">Usuário</div>
+          </div>
+        </div>
+        <button class="btn-close d-lg-none" id="sidebar-close"></button>
+      </div>
+      <nav class="nav flex-column mt-2 px-2" role="navigation"><span class="nav-heading">Principal</span><a
+          href="criar_tabela.html" class="nav-item nav-link"><i class="bi bi-plus-circle-fill"></i><span
+            class="nav-text">Nova Tabela</span></a><a href="historico.html" class="nav-item nav-link active"><i
+            class="bi bi-clock-history"></i><span class="nav-text">Histórico</span></a><a href="dashboard.html"
+          class="nav-item nav-link"><i class="bi bi-bar-chart-line-fill"></i><span
+            class="nav-text">Dashboard</span></a><span class="nav-heading mt-3">Conta</span><a href="perfil.html"
+          class="nav-item nav-link"><i class="bi bi-person"></i><span class="nav-text">Perfil</span></a><a
+          href="configuracoes.html" class="nav-item nav-link"><i class="bi bi-gear"></i><span
+            class="nav-text">Configurações</span></a></nav>
+      <div class="sidebar-bottom p-3"><a href="#" class="logout d-block text-danger mt-2"><i
+            class="bi bi-box-arrow-left me-2"></i>Sair</a></div>
+    </aside>
+
+    <main id="main">
+      <header class="mobile-header d-lg-none">
+        <button class="btn" id="sidebar-toggle"><i class="bi bi-list"></i></button>
+        <div class="mobile-logo">
+          <div class="logo-nt">NT</div>
+          <div class="brand ms-2">NutriTable</div>
+        </div>
+      </header>
+      <nav class="top-navbar d-none d-lg-flex">
+        <div class="logo-nt">NT</div>
+        <div class="ms-3">
+          <div class="brand">NutrifyTable</div>
+          <div class="subtitle">Gerador de Tabelas</div>
+        </div>
+      </nav>
+      <div class="main-content container-fluid px-4 py-4">
+        <header class="main-header mb-4">
+          <h1 class="h2">Histórico</h1>
+        </header>
+        <div id="history-list">
+          <div class="card history-item mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title mb-0">Suco Natural de Laranja</h5>
+                <div class="d-flex gap-2 flex-shrink-0"><span class="badge badge-base usda">USDA</span><span
+                    class="badge badge-status finalizada">Finalizada</span></div>
+              </div>
+              <p class="card-text text-muted small mb-3">Criada em 14/01/2025 • 8 downloads • 23 visualizações</p>
+              <div class="d-flex flex-wrap gap-4 align-items-center"><a href="#" class="action-link"><i
+                    class="bi bi-box-arrow-up-right"></i> Abrir</a><a href="#" class="action-link"><i
+                    class="bi bi-pencil"></i> Editar</a><a href="#" class="action-link"><i class="bi bi-files"></i>
+                  Duplicar</a><a href="#" class="action-link"><i class="bi bi-download"></i> Baixar</a><a href="#"
+                  class="action-link text-danger"><i class="bi bi-trash"></i> Excluir</a></div>
+            </div>
+          </div>
+          <div class="card history-item mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <h5 class="card-title mb-0">Barra de Cereal Funcional</h5>
+                <div class="d-flex gap-2 flex-shrink-0"><span class="badge badge-base taco">TACO</span><span
+                    class="badge badge-status rascunho">Rascunho</span></div>
+              </div>
+              <p class="card-text text-muted small mb-3">Criada em 13/01/2025 • 0 downloads • 5 visualizações</p>
+              <div class="d-flex flex-wrap gap-4 align-items-center"><a href="#" class="action-link"><i
+                    class="bi bi-box-arrow-up-right"></i> Abrir</a><a href="#" class="action-link"><i
+                    class="bi bi-pencil"></i> Editar</a><a href="#" class="action-link"><i class="bi bi-files"></i>
+                  Duplicar</a><a href="#" class="action-link"><i class="bi bi-download"></i> Baixar</a><a href="#"
+                  class="action-link text-danger"><i class="bi bi-trash"></i> Excluir</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/historico.js"></script>
+</body>
+
+</html>
