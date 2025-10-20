@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastro | Nutrity</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+
+  <!-- JS -->
+  <script src="{{ url_for('static', filename='js/cadastro.js') }}" defer></script>
+
+  <!-- Ícones Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Lado esquerdo - Imagem -->
+    <div class="left-side">
+      <img src="{{ url_for('static', filename='imagens/iStock-1478737863.jpg') }}" alt="Imagem de cadastro">
+    </div>
+
+    <!-- Lado direito - Formulário -->
+    <div class="right-side">
+      <div class="login-box">
+        <div class="logo">
+          <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" viewBox="0 0 24 24"
+                 fill="none" stroke="#008B1D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 class="lucide lucide-chef-hat">
+              <path d="M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 
+                       5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 
+                       1.041V20a1 1 0 0 0 1 1Z"/>
+              <path d="M6 17h12"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="header">
+          <h1>Crie sua conta</h1>
+          <p>Preencha os dados para começar</p>
+        </div>
+
+        <!-- Formulário Flask -->
+        <form id="signupForm" method="POST" action="{{ url_for('cadastro') }}">
+          
+          <!-- Nome -->
+          <div class="field">
+            <label for="nome">nome</label>
+            <div class="input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-icon lucide-user">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              <input type="text" name="nome" id="nome" placeholder="Digite seu nome" required />
+            </div>
+          </div>
+
+
+
+          <!-- E-mail -->
+          <div class="field">
+            <label for="email">E-mail</label>
+            <div class="input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="m22 7-8.97 5.7a2 2 0 0 1-2.06 0L2 7"/>
+              </svg>
+              <input type="email" name="email" id="email" placeholder="Digite seu e-mail" required />
+            </div>
+          </div>
+
+          <!-- Senha -->
+          <div class="field">
+            <label for="password">Senha</label>
+            <div class="input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock-icon lucide-lock">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input type="password" name="senha" id="password" placeholder="Digite sua senha" required />
+              <!-- <button type="button" id="togglePassword"><i data-lucide="eye"></i></button> -->
+            </div>
+          </div>
+
+          <!-- Botão -->
+          <button type="submit" class="btn">Cadastrar</button>
+
+          <!-- Link para login -->
+          <p class="signup">
+            Já tem uma conta?
+            <a href="{{ url_for('login') }}">Entrar</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inicialização dos ícones -->
+  <script>
+    lucide.createIcons();
+  </script>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="container mt-3">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+</body>
+</html>
