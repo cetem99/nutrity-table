@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="css/login.css" />
+  <!-- Bootstrap CSS and Icons (match perfil styling) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Lucide Icons kept for SVGs if used elsewhere -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Lado esquerdo - Imagem -->
+    <div class="left-side">
+      <img src="imagens/iStock-1478737863.jpg" alt="Imagem de login" />
+    </div>
+
+    <!-- Lado direito - Formulário -->
+    <div class="right-side">
+      <div class="login-box">
+        <div class="logo">
+          <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" viewBox="0 0 24 24" fill="none"
+              stroke="#008B1D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-chef-hat">
+              <path d="M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z"/>
+              <path d="M6 17h12"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="header">
+          <h1>Bem-vindo de volta!</h1>
+          <p>Faça login para continuar</p>
+        </div>
+
+        <form id="loginForm">
+          <!-- E-mail -->
+          <div class="field">
+            <label for="email">E-mail</label>
+            <div class="input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none"
+                stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-user">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <input type="email" id="email" placeholder="Digite seu e-mail" required />
+            </div>
+          </div>
+
+          <!-- Senha -->
+          <div class="field">
+            <label for="password">Senha</label>
+            <div class="input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none"
+                stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-lock">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              <input type="password" id="password" placeholder="Digite sua senha" required />
+              <button type="button" id="togglePassword">
+                <i data-lucide="eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Lembrar de mim e esqueci senha -->
+          <div class="options">
+            <label>
+              <input type="checkbox" id="rememberMe" />
+              Lembrar de mim
+            </label>
+            <a href="#">Esqueceu a senha?</a>
+          </div>
+
+          <!-- Botão -->
+          <button type="submit" class="btn">Entrar</button>
+
+          <!-- Cadastro -->
+          <p class="signup">
+            Não tem uma conta?
+            <a href="cadastro.html">Cadastre-se</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts ao final -->
+  <script src="js/login.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
