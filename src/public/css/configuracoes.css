@@ -55,7 +55,6 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
   display: flex; flex-direction: column; z-index: 1200; 
 }
 .sidebar-top { padding: 1rem; border-bottom: 1px solid var(--border-color); }
-.img_usuario { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
 .brand { font-weight: 700; font-size: 1.1rem; color: var(--text-primary); }
 .subtitle { font-size: 1rem; color: var(--text-muted); }
 .nav-heading { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; padding: 0.5rem 1rem; letter-spacing: .5px; }
@@ -103,7 +102,7 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 .settings-card .card-title i, .profile-card .card-title i { color: var(--nt-green); }
 .btn-success { background-color: var(--nt-green); border-color: var(--nt-green); padding: 0.6rem 1.5rem; }
 .btn-success:hover { background-color: #197535; border-color: #197535; }
-.profile-photo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border-color); }
+/* profile/photo styles removed */
 .danger-zone-card { border-color: #842029 !important; }
 .danger-zone-card .card-title i { color: #dc3545; }
 .danger-zone-card .alert.alert-danger { background-color: rgba(220, 53, 69, 0.1); border-color: rgba(220, 53, 69, 0.2); }

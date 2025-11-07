@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { connectDB } from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import profileRoutes from "./routes/profileRoutes.js";
+import tableRoutes from './routes/tableRoutes.js';
 
 
 // Config
@@ -28,6 +29,7 @@ connectDB();
 // API routes
 app.use('/api/users', userRoutes);
 app.use("/api/profile", profileRoutes);
+app.use('/api/tables', tableRoutes);
 
 // Fallback: serve login.html para root
 app.get('/', (req, res) => {

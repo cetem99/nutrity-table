@@ -65,7 +65,6 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
   display: flex; flex-direction: column; z-index: 1200; 
 }
 .sidebar-top { padding: 1rem; border-bottom: 1px solid var(--border-color); }
-.img_usuario { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
 .brand { font-weight: 700; font-size: 1.1rem; color: var(--text-primary); }
 .subtitle { font-size: 1rem; color: var(--text-muted); }
 .nav-heading { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; padding: 0.5rem 1rem; letter-spacing: .5px; }

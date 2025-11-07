@@ -17,12 +17,7 @@
   <div id="app">
     <aside id="sidebar">
       <div class="sidebar-top px-3 py-3 d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center"><img src="imagens/icone-usuário.jpg" class="img_usuario"
-            id="sidebarUserImage" alt="Avatar do usuário">
-          <div class="ms-2">
-            <div class="brand">Usuário</div>
-          </div>
-        </div>
+        <div class="d-flex align-items-center"><div class="ms-2"><div class="brand">Usuário</div></div></div>
         <button class="btn-close d-lg-none" id="sidebar-close"></button>
       </div>
       <nav class="nav flex-column mt-2 px-2" role="navigation"><span class="nav-heading">Principal</span><a
@@ -59,13 +54,13 @@
               <h1 class="h2 mb-1" id="product-title">Bolo de Milho</h1>
               <p class="text-body-secondary">Tabela nutricional gerada em 26/09/2025</p>
             </div>
-            <div class="d-flex gap-2 mt-2 mt-md-0 flex-wrap">
+              <div class="d-flex gap-2 mt-2 mt-md-0 flex-wrap">
               <button class="btn btn-outline-secondary"><i class="bi bi-pencil me-1"></i> Editar</button>
               <button class="btn btn-outline-secondary" id="export-pdf-btn"><i class="bi bi-file-earmark-pdf me-1"></i>
                 Exportar PDF</button>
               <button class="btn btn-outline-secondary" id="export-csv-btn"><i class="bi bi-download me-1"></i> Exportar
                 CSV</button>
-              <button class="btn btn-success"><i class="bi bi-check-circle me-1"></i> Salvar</button>
+              <button class="btn btn-success" id="save-portion-btn"><i class="bi bi-check-circle me-1"></i> Salvar</button>
             </div>
           </header>
           <div class="card mb-4">
@@ -190,6 +185,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
     integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="js/sidebarUser.js"></script>
   <script src="js/tabela_resultado.js"></script>
 </body>
 
