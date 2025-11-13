@@ -127,6 +127,52 @@ document.addEventListener('DOMContentLoaded', () => {
   // add three empty rows by default
   for (let i = 0; i < 3; i++) createIngredientRow();
 
+  // if ?edit=<id> present, load table and populate form for editing
+  const params = new URLSearchParams(window.location.search);
+  const editId = params.get('edit');
+  let isEditMode = false;
+  async function loadForEdit(id) {
+    try {
+      const userData = JSON.parse(localStorage.getItem('user')) || JSON.parse(sessionStorage.getItem('user')) || {};
+      const token = userData.token;
+      if (!token) { alert('Você precisa estar logado para editar uma tabela.'); window.location.href = 'login.html'; return; }
+      const res = await fetch(`/api/tables/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+      if (!res.ok) { alert('Falha ao carregar tabela para edição.'); return; }
+      const json = await res.json();
+      const t = json.table || json;
+      if (!t) { alert('Tabela não encontrada'); return; }
+      isEditMode = true;
+
+      // populate title
+      const titleEl = document.getElementById('product-name');
+      if (titleEl) titleEl.value = t.title || '';
+      // portion size
+      const psEl = document.getElementById('portion-size');
+      if (psEl) psEl.value = t.portionSize || 100;
+
+      // select base card
+      selectedBase = t.base || selectedBase;
+      baseCards.forEach(c => c.classList.toggle('selected', c.dataset.value === selectedBase));
+
+      // clear existing ingredient rows and create from items
+      ingredientList.innerHTML = '';
+      (t.items || []).forEach(it => {
+        const row = createIngredientRow();
+        row.querySelector('.ingredient-name-input').value = it.name || '';
+        row.querySelector('.ingredient-qty').value = it.quantity || '';
+        const unitEl = row.querySelector('.ingredient-unit');
+        if (unitEl) unitEl.value = it.unit || 'g';
+      });
+
+      // scroll to step 2 (ingredients)
+      showStep(2);
+    } catch (err) {
+      console.error('loadForEdit error', err);
+      alert('Erro ao carregar tabela para edição.');
+    }
+  }
+  if (editId) loadForEdit(editId);
+
   
 
   // --- GENERATE / SUBMIT TABLE ---
@@ -151,22 +197,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = userData?.token;
 
     try {
-      const res = await fetch('/api/tables', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-        },
-        body: JSON.stringify({ title, base, portionSize, items })
-      });
+      let res;
+      if (isEditMode && editId) {
+        // update existing table
+        res = await fetch(`/api/tables/${encodeURIComponent(editId)}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({ title, base, portionSize, items })
+        });
+      } else {
+        res = await fetch('/api/tables', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+          },
+          body: JSON.stringify({ title, base, portionSize, items })
+        });
+      }
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Erro ao gerar tabela');
-      alert('Tabela gerada com sucesso!');
-      window.location.href = 'historico.html';
+      if (!res.ok) throw new Error(data.message || 'Erro ao gerar/atualizar tabela');
+      const table = data.table || data;
+      alert(isEditMode ? 'Tabela atualizada com sucesso!' : 'Tabela gerada com sucesso!');
+      // redirect to the table result view for the created/updated table
+      const idToOpen = table._id || table.id || editId;
+      if (idToOpen) window.location.href = `tabela_resultado.html?id=${encodeURIComponent(idToOpen)}`;
+      else window.location.href = 'historico.html';
     } catch (err) {
       console.error(err);
-      alert(err.message || 'Erro ao criar tabela');
+      alert(err.message || 'Erro ao criar/atualizar tabela');
     }
   });
 

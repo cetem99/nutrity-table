@@ -62,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
               <a href="tabela_resultado.html?id=${t._id}" class="action-link"><i class="bi bi-box-arrow-up-right"></i> Abrir</a>
               <a href="#" data-id="${t._id}" class="action-link btn-edit"><i class="bi bi-pencil"></i> Editar</a>
               <a href="#" data-id="${t._id}" class="action-link btn-duplicate"><i class="bi bi-files"></i> Duplicar</a>
-              <a href="#" data-id="${t._id}" class="action-link btn-download"><i class="bi bi-download"></i> Baixar</a>
               <a href="#" data-id="${t._id}" class="action-link text-danger btn-delete"><i class="bi bi-trash"></i> Excluir</a>
             </div>
           </div>
@@ -85,6 +84,64 @@ document.addEventListener('DOMContentLoaded', function() {
           } catch (err) {
             console.error(err);
             alert('Erro ao excluir tabela');
+          }
+        });
+      });
+
+      // attach edit handlers - open criar_tabela.html in edit mode
+      container.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const id = btn.getAttribute('data-id');
+          if (!id) return;
+          // navigate to creation page in edit mode
+          window.location.href = `criar_tabela.html?edit=${encodeURIComponent(id)}`;
+        });
+      });
+
+      // attach duplicate handlers
+      container.querySelectorAll('.btn-duplicate').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const id = btn.getAttribute('data-id');
+          if (!id) return;
+          if (!confirm('Deseja duplicar esta tabela?')) return;
+          try {
+            const userData = JSON.parse(localStorage.getItem('user')) || JSON.parse(sessionStorage.getItem('user')) || {};
+            const token = userData.token;
+            if (!token) { alert('Você precisa estar logado para duplicar.'); return; }
+
+            // fetch the original table
+            const getRes = await fetch(`/api/tables/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+            if (!getRes.ok) throw new Error('Falha ao buscar tabela original');
+            const gj = await getRes.json();
+            const orig = gj.table || gj;
+            if (!orig) throw new Error('Tabela original não encontrada');
+
+            // prepare payload: copy items (name, quantity, unit)
+            const items = (orig.items || []).map(it => ({ name: it.name, quantity: it.quantity, unit: it.unit }));
+            const payload = {
+              title: `Cópia de ${orig.title || 'Sem título'}`,
+              base: orig.base || 'local',
+              portionSize: orig.portionSize || 100,
+              items,
+            };
+
+            const createRes = await fetch('/api/tables', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+              body: JSON.stringify(payload)
+            });
+            if (!createRes.ok) {
+              const txt = await createRes.text();
+              throw new Error(txt || 'Falha ao criar cópia');
+            }
+            // success - reload history to show the new copy
+            await loadHistory();
+            alert('Tabela duplicada com sucesso.');
+          } catch (err) {
+            console.error('duplicar error', err);
+            alert('Erro ao duplicar tabela.');
           }
         });
       });

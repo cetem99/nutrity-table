@@ -48,30 +48,47 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // --- Função para gerar CSV ---
     function exportTableToCSV() {
-    let csvContent = "data:text/csv;charset=utf-8,";
-    const headers = ["Nutriente", "Valor por 100g", "Valor por 25g", "Valor por Porção", "%VD"];
-    csvContent += headers.join(",") + "\r\n";
+      let csvContent = "data:text/csv;charset=utf-8,";
+      const headers = ["Nutriente", "Por 100 g", "Por 25 g", "Por porção (g)", "%VD*"];
+      csvContent += headers.join(",") + "\r\n";
 
-    const rows = document.querySelectorAll('#nutritional-table-data .data-row');
-    rows.forEach(row => {
-      const nutrient = `"${row.dataset.nutrient}"`;
-      const value100g = row.dataset.g;
-      const value25g = row.dataset.g25 || '';
-      const valuePortion = row.dataset.portion;
-      const valueVd = row.dataset.vd === '-' ? '' : row.dataset.vd;
-      const csvRow = [nutrient, value100g, value25g, valuePortion, valueVd].join(",");
-      csvContent += csvRow + "\r\n";
-    });
+      const rows = document.querySelectorAll('#nutritional-table-data .data-row');
+      rows.forEach(row => {
+        // row children layout: [label, per100, per25, perPortion, vd]
+        const cells = row.querySelectorAll('div');
+        const nutrient = `"${row.dataset.nutrient}"`;
+        // helper to extract numeric portion before space (removes unit)
+        const extractNum = (text) => {
+          if (!text) return '';
+          const t = text.trim();
+          if (t === '—' || t === '') return '';
+          // usually '10,0 g' or '16,4' (vd). take first token and remove any non-digit/comma/dot
+          const first = t.split('\u00A0')[0].split(' ')[0];
+          return first.replace(/[^0-9,\.\-]/g, '');
+        };
+        const per100Text = cells[1]?.textContent || '';
+        const per25Text = cells[2]?.textContent || '';
+        const perPortionText = cells[3]?.textContent || '';
+        const vdText = cells[4]?.textContent || row.dataset.vd || '';
 
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `${getProductTitle()}.csv`);
+        const value100g = extractNum(per100Text);
+        const value25g = extractNum(per25Text);
+        const valuePortion = extractNum(perPortionText);
+        const valueVd = extractNum(vdText);
+
+        const csvRow = [nutrient, value100g, value25g, valuePortion, valueVd].join(",");
+        csvContent += csvRow + "\r\n";
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `${getProductTitle()}.csv`);
     
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
 
   // --- LOAD TABLE FROM ID ---
   let currentTableId = null;
@@ -176,11 +193,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // compute nutrition totals using rule-of-three
       const nutrientsKeys = [
-        { key: 'energy_kcal', label: 'Valor energético', unit: 'kcal' },
-        { key: 'protein_g', label: 'Proteínas', unit: 'g' },
-        { key: 'fat_g', label: 'Gorduras', unit: 'g' },
-        { key: 'carbs_g', label: 'Carboidratos', unit: 'g' },
+        { key: 'energy_kcal', label: 'Valor energético (kcal)', unit: 'kcal' },
+        { key: 'carbs_g', label: 'Carboidratos (g)', unit: 'g' },
+        { key: 'sugars_total_g', label: 'Açúcares totais (g)', unit: 'g' },
+        { key: 'sugars_added_g', label: 'Açúcares adicionados (g)', unit: 'g' },
+        { key: 'protein_g', label: 'Proteínas (g)', unit: 'g' },
+        { key: 'fat_g', label: 'Gorduras totais (g)', unit: 'g' },
+        { key: 'fat_saturated_g', label: 'Gorduras saturadas (g)', unit: 'g' },
+        { key: 'fat_trans_g', label: 'Gorduras trans (g)', unit: 'g' },
+        { key: 'fiber_g', label: 'Fibra alimentar (g)', unit: 'g' },
+        { key: 'sodium_mg', label: 'Sódio (mg)', unit: 'mg' },
       ];
+
+      // VD reference values (ANVISA RDC 429/2020) for 2.000 kcal diet
+      const VD_REF = {
+        carbs_g: 300.0,
+        protein_g: 75.0,
+        fat_g: 55.0,
+        fat_saturated_g: 22.0,
+        fiber_g: 25.0,
+        sodium_mg: 2000.0,
+        sugars_added_g: 50.0,
+      };
 
       const totals = {};
       let totalWeight = 0;
@@ -191,9 +225,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const qty = Number(it.quantity) || 0;
         if (!it.nutrition) return;
         nutrientsKeys.forEach(n => {
-          const valPer100 = Number(it.nutrition[n.key]);
+          // fallback for missing fields in nutrition object
+          let valPer100 = it.nutrition[n.key];
+          if (typeof valPer100 === 'undefined') {
+            // tentativas de mapeamento alternativo para campos comuns
+            if (n.key === 'sugars_total_g') valPer100 = it.nutrition.sugars_g ?? it.nutrition.sugar_g;
+            if (n.key === 'sugars_added_g') valPer100 = it.nutrition.sugars_added_g ?? it.nutrition.sugar_added_g;
+            if (n.key === 'fat_saturated_g') valPer100 = it.nutrition.saturated_fat_g ?? it.nutrition.fat_saturated_g;
+            if (n.key === 'fat_trans_g') valPer100 = it.nutrition.trans_fat_g ?? it.nutrition.fat_trans_g;
+            if (n.key === 'fiber_g') valPer100 = it.nutrition.fiber_g ?? it.nutrition.fibra_g;
+            if (n.key === 'sodium_mg') valPer100 = it.nutrition.sodium_mg ?? it.nutrition.sodio_mg;
+          }
+          valPer100 = Number(valPer100);
           if (!isNaN(valPer100) && valPer100 !== null) {
-            totals[n.key] += (valPer100 * qty) / 100.0; // rule of three: (valPer100 * qty) / 100
+            totals[n.key] += (valPer100 * qty) / 100.0;
           }
         });
       });
@@ -212,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // table-like grid
   const grid = document.createElement('div');
   grid.className = 'table-grid header-row mb-2';
-  grid.innerHTML = `<div class="fw-bold">Informação</div><div class="fw-bold text-end">Por 100 g</div><div class="fw-bold text-end">Por 25 g</div><div class="fw-bold text-end">Por porção (${Number(t.portionSize||50)} g)</div>`;
+  grid.innerHTML = `<div class="fw-bold">Informação</div><div class="fw-bold text-end">Por 100 g</div><div class="fw-bold text-end">Por 25 g</div><div class="fw-bold text-end">Por porção (${Number(t.portionSize||50)} g)</div><div class="fw-bold text-end">%VD*</div>`;
       nutBody.appendChild(grid);
 
       const nutContainer = document.createElement('div');
@@ -223,23 +268,31 @@ document.addEventListener('DOMContentLoaded', function() {
         const ps = Number(portionSize) || Number(t.portionSize) || 50;
 
         nutrientsKeys.forEach(n => {
-          const totalForRecipe = totals[n.key] || 0; // total for entire recipe
-          // per 100g of final product: (totalForRecipe / totalWeight) * 100
+          const totalForRecipe = totals[n.key] || 0;
           const per100g = totalWeight > 0 ? (totalForRecipe / totalWeight) * 100 : 0;
-          // per 25g: fraction of per100g
           const per25g = per100g * 0.25;
-          // per portion: totalForRecipe * (portionSize / totalWeight)
           const perPortion = totalWeight > 0 ? totalForRecipe * (ps / totalWeight) : 0;
+
+          const showValue = (v) => (v === null || v === undefined || isNaN(v)) ? '—' : (Number(v) === 0 ? '0.0' : fmt(v));
 
           const row = document.createElement('div');
           row.className = 'table-grid data-row';
           row.setAttribute('data-nutrient', n.label);
-          // set dataset attributes used by CSV export
           row.dataset.g = per100g;
           row.dataset.g25 = per25g;
           row.dataset.portion = perPortion;
-          row.dataset.vd = '-';
-          row.innerHTML = `<div>${n.label} (${n.unit})</div><div class="text-end">${fmt(per100g)} ${n.unit}</div><div class="text-end">${fmt(per25g)} ${n.unit}</div><div class="text-end">${fmt(perPortion)} ${n.unit}</div>`;
+          // compute %VD for the portion using VD_REF when available
+          const vdValue = VD_REF[n.key] ?? null;
+          let vdPercent = '-';
+          if (vdValue != null && !isNaN(perPortion)) {
+            const raw = (perPortion / vdValue) * 100.0;
+            const rounded = Math.round(raw * 10) / 10.0;
+            vdPercent = rounded.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+          }
+          row.dataset.vd = vdPercent;
+          row.dataset.unit = n.unit || '';
+          // show %VD without the percent sign as requested; the header marks it as "%VD*"
+          row.innerHTML = `<div>${n.label}</div><div class="text-end">${showValue(per100g)} ${n.unit}</div><div class="text-end">${showValue(per25g)} ${n.unit}</div><div class="text-end">${showValue(perPortion)} ${n.unit}</div><div class="text-end">${vdPercent === '-' ? '' : vdPercent}</div>`;
           nutContainer.appendChild(row);
         });
       }
@@ -311,4 +364,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // call loader
   loadTableFromQuery();
+
+  // wire Edit button on result page to open creation page in edit mode
+  const editBtn = document.querySelector('.btn.btn-outline-secondary');
+  if (editBtn) {
+    editBtn.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      if (!currentTableId) return;
+      window.location.href = `criar_tabela.html?edit=${encodeURIComponent(currentTableId)}`;
+    });
+  }
 });
