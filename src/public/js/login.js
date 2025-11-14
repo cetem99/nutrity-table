@@ -2,6 +2,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const togglePassword = document.getElementById("togglePassword");
   const passwordInput = document.getElementById("password");
   const loginForm = document.getElementById("loginForm");
+  const emailInput = document.getElementById("email");
+  const rememberMeCheckbox = document.getElementById("rememberMe");
+
+  // Verificar se há credenciais salvas
+  function checkSavedCredentials() {
+    const savedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
+    if (savedUser) {
+      const user = JSON.parse(savedUser);
+      emailInput.value = user.email || '';
+      // Não preenchemos a senha por segurança
+      rememberMeCheckbox.checked = !!localStorage.getItem("user");
+    }
+  }
+
+  // Chamar a verificação ao carregar a página
+  checkSavedCredentials();
 
   let showPassword = false;
 
