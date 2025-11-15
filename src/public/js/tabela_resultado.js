@@ -300,6 +300,11 @@ document.addEventListener('DOMContentLoaded', function() {
       renderNutritionRows(t.portionSize || 50);
       nutBody.appendChild(nutContainer);
 
+      const footnote = document.createElement('p');
+      footnote.className = 'table-footnote';
+      footnote.textContent = '*Percentual de valores di\u00E1rios fornecidos pela por\u00E7\u00E3o.';
+      nutBody.appendChild(footnote);
+
       // wire portion input to re-render per portion values on change
       const portionInputEl = document.getElementById('portion');
       if (portionInputEl) {

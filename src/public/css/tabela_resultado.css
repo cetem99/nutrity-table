@@ -151,11 +151,22 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 .nutritional-table .data-row {
   border-bottom: 1px solid var(--border-color);
 }
+.nutritional-table .data-row:last-of-type {
+  border-bottom: none;
+}
 .nutritional-table .data-row.no-border {
   border-bottom: none;
 }
 .nutritional-table .data-row.indented {
   padding-left: 1rem;
+}
+
+.nutritional-table .table-footnote {
+  border-top: 2px solid var(--text-primary);
+  margin-top: 0.75rem;
+  padding-top: 0.35rem;
+  font-size: 0.95rem;
+  color: var(--text-muted);
 }
 
 /* =============================================== */
@@ -181,7 +192,14 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 .pdf-export-style .data-row {
   border-bottom-width: 1px !important;
 }
+.pdf-export-style .data-row:last-of-type {
+  border-bottom-width: 0 !important;
+}
 .pdf-export-style .table-grid {
   padding: 0.3rem 0;
   font-size: 1rem; /* Diminui a fonte para o PDF */
+}
+.pdf-export-style .table-footnote {
+  border-top: 2px solid #000000 !important;
+  color: #000000 !important;
 }
