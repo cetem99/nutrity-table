@@ -11,6 +11,8 @@
   --soft-green-bg: #e6f6ee;
   --table-line-color: #231f20;
   --table-line-width: 0.333px;
+  --table-info-separator-width: 4px;
+  --table-section-separator-width: 4px;
   
   /* Cores Globais e AJUSTE de 90% */
   --sidebar-w: 216px; /* Original: 240px */
@@ -189,6 +191,10 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 .nutritional-table .table-grid.header-row > div {
   font-weight: 400 !important;
 }
+.nutritional-table .table-grid.header-row {
+  border-bottom: var(--table-section-separator-width) solid var(--table-line-color);
+  margin-bottom: 0.25rem;
+}
 .nutritional-table .data-row {
   border-bottom: var(--table-line-width) solid var(--table-line-color);
   font-size: 10.67px; /* 8pt */
@@ -259,6 +265,13 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 }
 .pdf-export-style .table-grid > div:first-child {
   border-left: none !important;
+}
+.pdf-export-style .table-grid > div:nth-child(2) {
+  border-left: var(--table-info-separator-width) solid #231f20 !important;
+}
+.pdf-export-style .table-grid.header-row {
+  border-bottom: var(--table-section-separator-width) solid #231f20 !important;
+  margin-bottom: 0.25rem !important;
 }
 .pdf-export-style .table-title {
   font-size: 13.33px !important;
