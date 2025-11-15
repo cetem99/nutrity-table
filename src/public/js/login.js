@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       alert(`Bem-vindo, ${data.user.name}!`);
-      window.location.href = "dashboard.html";
+      window.location.href = "historico.html";
     } catch (error) {
       console.error("Erro:", error);
       alert("Erro ao conectar ao servidor.");

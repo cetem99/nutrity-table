@@ -27,9 +27,93 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector(`.step[data-step="${n}"]`)?.classList.add('current');
     document.getElementById(`step-${n}`)?.classList.remove('d-none');
   }
-  if (btnStep1) btnStep1.addEventListener('click', () => showStep(2));
-  document.querySelectorAll('.btn-prev').forEach(b => b.addEventListener('click', () => showStep(1)));
-  document.querySelectorAll('.btn-next').forEach(b => b.addEventListener('click', () => showStep(3)));
+  // Função para obter a etapa atual
+  function getCurrentStep() {
+    const currentStep = document.querySelector('.step.current');
+    return currentStep ? parseInt(currentStep.dataset.step) : 1;
+  }
+
+  // Evento do botão da primeira etapa
+  if (btnStep1) {
+    btnStep1.addEventListener('click', (e) => {
+      e.preventDefault();
+      showStep(2);
+    });
+  }
+  
+  // Evento dos botões de voltar
+  document.querySelectorAll('.btn-prev').forEach(b => {
+    b.addEventListener('click', (e) => {
+      e.preventDefault();
+      const currentStep = getCurrentStep();
+      if (currentStep > 1) {
+        showStep(currentStep - 1);
+      }
+    });
+  });
+  // Função para validar os ingredientes
+  function validarIngredientes() {
+    const ingredientRows = document.querySelectorAll('.ingredient-row');
+    let hasValidIngredient = false;
+    
+    // Verifica cada linha de ingrediente
+    for (const row of ingredientRows) {
+      const nameInput = row.querySelector('.ingredient-name-input');
+      const qtyInput = row.querySelector('.ingredient-qty');
+      const name = nameInput?.value.trim();
+      const qty = qtyInput?.value.trim();
+      
+      // Se ambos os campos estiverem preenchidos, é um ingrediente válido
+      if (name && qty) {
+        hasValidIngredient = true;
+      } 
+      // Se apenas um dos campos estiver preenchido, mostra erro
+      else if (name || qty) {
+        if (!name) {
+          nameInput.focus();
+          return { valido: false, mensagem: 'Por favor, preencha o nome do ingrediente.' };
+        }
+        if (!qty) {
+          qtyInput.focus();
+          return { valido: false, mensagem: 'Por favor, preencha a quantidade do ingrediente.' };
+        }
+      }
+    }
+    
+    // Verifica se há pelo menos um ingrediente válido
+    if (!hasValidIngredient) {
+      return { 
+        valido: false, 
+        mensagem: 'Por favor, adicione pelo menos um ingrediente com nome e quantidade válidos.' 
+      };
+    }
+    
+    return { valido: true };
+  }
+  
+  // Adiciona o evento de clique ao botão Próximo
+  document.querySelectorAll('.btn-next').forEach(b => {
+    b.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      // Valida os ingredientes apenas se estiver na etapa de ingredientes (etapa 2)
+      if (getCurrentStep() === 2) {
+        const validacao = validarIngredientes();
+        
+        // Se não for válido, mostra mensagem e impede o avanço
+        if (!validacao.valido) {
+          alert(validacao.mensagem);
+          return;
+        }
+      }
+      
+      // Avança para o próximo passo
+      const currentStep = getCurrentStep();
+      if (currentStep < 3) { // 3 é o número máximo de etapas
+        showStep(currentStep + 1);
+      }
+    });
+  });
 
   // --- INGREDIENTS MANAGEMENT + AUTOCOMPLETE ---
   const ingredientList = document.getElementById('ingredient-list');
@@ -49,10 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
   row.style.gridTemplateColumns = '1fr 120px 120px 40px';
     row.innerHTML = `
       <div style="position:relative">
-        <input class="form-control ingredient-name-input" placeholder="" autocomplete="off" />
+        <input class="form-control ingredient-name-input" placeholder="Nome do ingrediente" autocomplete="off" required />
         <div class="suggestions-container" style="position:absolute;left:0;right:0;z-index:1000"></div>
       </div>
-      <input type="number" class="form-control ingredient-qty" placeholder="" />
+      <input type="number" class="form-control ingredient-qty" placeholder="Qtd" required min="0.01" step="0.01" />
       <select class="form-select ingredient-unit"><option value="g">g</option><option value="ml">ml</option><option value="unit">un</option></select>
       <button class="btn btn-outline-danger btn-remove" title="Remover"><i class="bi bi-x-lg"></i></button>
     `;
@@ -123,9 +207,20 @@ document.addEventListener('DOMContentLoaded', () => {
     return row;
   }
 
-  if (addIngredientBtn) addIngredientBtn.addEventListener('click', (e) => { e.preventDefault(); createIngredientRow(); });
-  // add three empty rows by default
-  for (let i = 0; i < 3; i++) createIngredientRow();
+  if (addIngredientBtn) {
+    addIngredientBtn.addEventListener('click', (e) => { 
+      e.preventDefault(); 
+      createIngredientRow();
+      // Rola para o novo ingrediente adicionado
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    });
+  }
+  
+  // Add only one empty row by default
+  createIngredientRow();
 
   // if ?edit=<id> present, load table and populate form for editing
   const params = new URLSearchParams(window.location.search);
