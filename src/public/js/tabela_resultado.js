@@ -25,25 +25,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // --- Função para gerar PDF ---
-  function createExportElement() {
-    const element = document.getElementById('nutritional-table-data');
-    if (!element) return null;
-    const clone = element.cloneNode(true);
-    // remove ingredient list + heading when exporting
-    clone.querySelectorAll('.ingredients-block').forEach(block => block.remove());
-    clone.removeAttribute('id');
-    clone.classList.add('pdf-export-style');
-    clone.style.position = 'absolute';
-    clone.style.left = '-9999px';
-    clone.style.top = '0';
-    clone.style.width = `${element.offsetWidth}px`;
-    document.body.appendChild(clone);
-    return clone;
-  }
-
   function exportTableToPDF() {
-    const exportElement = createExportElement();
-    if (!exportElement) return;
+    const element = document.getElementById('nutritional-table-data');
+    if (!element) return;
     const productTitle = getProductTitle();
 
     const options = {
@@ -54,12 +38,14 @@ document.addEventListener('DOMContentLoaded', function() {
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
 
-    const worker = html2pdf().from(exportElement).set(options).save();
-    if (worker && typeof worker.finally === 'function') {
-      worker.finally(() => exportElement.remove());
-    } else {
-      exportElement.remove();
-    }
+    // aplica estilo de exportação no próprio elemento
+    element.classList.add('pdf-export-style');
+    
+    html2pdf().from(element).set(options).save().then(() => {
+      element.classList.remove('pdf-export-style');
+    }).catch(() => {
+      element.classList.remove('pdf-export-style');
+    });
   }
 
   // --- Função para gerar CSV ---

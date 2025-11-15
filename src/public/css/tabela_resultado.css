@@ -132,24 +132,58 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
   font-weight: bold;
   line-height: 1.2;
 }
+.nutritional-table {
+  font-family: Arial, Helvetica, sans-serif;
+}
 .nutritional-table .table-header {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 0.35rem;
   border-bottom: 2px solid var(--text-primary);
   padding-bottom: 0.5rem;
+  text-align: center;
+}
+.nutritional-table .table-title {
+  font-size: 13.33px; /* 10pt */
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0;
+}
+.nutritional-table .table-summary {
+  font-size: 10.67px; /* 8pt */
+  line-height: 1.3;
+  margin: 0.35rem 0 0;
+  text-align: center;
 }
 .nutritional-table .table-grid {
   display: grid;
   grid-template-columns: 2.5fr 1fr 1fr 1fr;
   gap: 1rem;
   padding: 0.5rem 0;
-  font-size: 1.1rem;
+  font-size: 10.67px; /* 8pt */
+  align-items: center;
+}
+.nutritional-table .table-grid > div {
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+}
+.nutritional-table .table-grid > div:first-child {
+  justify-content: flex-start;
+  text-align: left;
+}
+.nutritional-table .table-grid > div:not(:first-child) {
+  justify-content: center;
+  text-align: center;
+}
+.nutritional-table .table-grid.header-row > div {
+  font-weight: 400 !important;
 }
 .nutritional-table .data-row {
   border-bottom: 1px solid var(--border-color);
+  font-size: 10.67px; /* 8pt */
 }
 .nutritional-table .data-row:last-of-type {
   border-bottom: none;
@@ -165,8 +199,9 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
   border-top: 2px solid var(--text-primary);
   margin-top: 0.75rem;
   padding-top: 0.35rem;
-  font-size: 0.95rem;
+  font-size: 8px; /* 6pt */
   color: var(--text-muted);
+  text-align: left;
 }
 
 /* =============================================== */
@@ -176,6 +211,9 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
   background: #ffffff !important;
   padding: 1rem;
   font-family: Arial, Helvetica, sans-serif;
+  width: 100% !important;
+  max-width: 520px;
+  margin: 0 auto !important;
 }
 .pdf-export-style, .pdf-export-style * {
   color: #000000 !important;
@@ -186,8 +224,13 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
   color: #000000 !important;
   border: 1px solid #bbbbbb !important;
 }
+.pdf-export-style .ingredients-block {
+  display: none !important;
+}
 .pdf-export-style .table-header {
   border-bottom-width: 3px !important;
+  align-items: center !important;
+  text-align: center !important;
 }
 .pdf-export-style .data-row {
   border-bottom-width: 1px !important;
@@ -197,9 +240,19 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 }
 .pdf-export-style .table-grid {
   padding: 0.3rem 0;
-  font-size: 1rem; /* Diminui a fonte para o PDF */
+  font-size: 10.67px !important;
+}
+.pdf-export-style .table-grid > div {
+  min-height: 28px !important;
+}
+.pdf-export-style .table-title {
+  font-size: 13.33px !important;
+}
+.pdf-export-style .table-summary {
+  font-size: 10.67px !important;
 }
 .pdf-export-style .table-footnote {
   border-top: 2px solid #000000 !important;
   color: #000000 !important;
+  font-size: 8px !important;
 }
