@@ -25,8 +25,25 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // --- Função para gerar PDF ---
-  function exportTableToPDF() {
+  function createExportElement() {
     const element = document.getElementById('nutritional-table-data');
+    if (!element) return null;
+    const clone = element.cloneNode(true);
+    // remove ingredient list + heading when exporting
+    clone.querySelectorAll('.ingredients-block').forEach(block => block.remove());
+    clone.removeAttribute('id');
+    clone.classList.add('pdf-export-style');
+    clone.style.position = 'absolute';
+    clone.style.left = '-9999px';
+    clone.style.top = '0';
+    clone.style.width = `${element.offsetWidth}px`;
+    document.body.appendChild(clone);
+    return clone;
+  }
+
+  function exportTableToPDF() {
+    const exportElement = createExportElement();
+    if (!exportElement) return;
     const productTitle = getProductTitle();
 
     const options = {
@@ -37,24 +54,23 @@ document.addEventListener('DOMContentLoaded', function() {
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
 
-    // Adiciona a classe de estilo para impressão e gera o PDF
-    element.classList.add('pdf-export-style');
-    
-    html2pdf().from(element).set(options).save().then(() => {
-      // Remove a classe de estilo após a geração do PDF
-      element.classList.remove('pdf-export-style');
-    });
+    const worker = html2pdf().from(exportElement).set(options).save();
+    if (worker && typeof worker.finally === 'function') {
+      worker.finally(() => exportElement.remove());
+    } else {
+      exportElement.remove();
+    }
   }
 
   // --- Função para gerar CSV ---
     function exportTableToCSV() {
       let csvContent = "data:text/csv;charset=utf-8,";
-      const headers = ["Nutriente", "Por 100 g", "Por 25 g", "Por porção (g)", "%VD*"];
+      const headers = ["Nutriente", "Por 100 g", "Por porção (g)", "%VD*"];
       csvContent += headers.join(",") + "\r\n";
 
       const rows = document.querySelectorAll('#nutritional-table-data .data-row');
       rows.forEach(row => {
-        // row children layout: [label, per100, per25, perPortion, vd]
+        // row children layout: [label, per100, perPortion, vd]
         const cells = row.querySelectorAll('div');
         const nutrient = `"${row.dataset.nutrient}"`;
         // helper to extract numeric portion before space (removes unit)
@@ -67,16 +83,14 @@ document.addEventListener('DOMContentLoaded', function() {
           return first.replace(/[^0-9,\.\-]/g, '');
         };
         const per100Text = cells[1]?.textContent || '';
-        const per25Text = cells[2]?.textContent || '';
-        const perPortionText = cells[3]?.textContent || '';
-        const vdText = cells[4]?.textContent || row.dataset.vd || '';
+        const perPortionText = cells[2]?.textContent || '';
+        const vdText = cells[3]?.textContent || row.dataset.vd || '';
 
         const value100g = extractNum(per100Text);
-        const value25g = extractNum(per25Text);
         const valuePortion = extractNum(perPortionText);
         const valueVd = extractNum(vdText);
 
-        const csvRow = [nutrient, value100g, value25g, valuePortion, valueVd].join(",");
+        const csvRow = [nutrient, value100g, valuePortion, valueVd].join(",");
         csvContent += csvRow + "\r\n";
       });
 
@@ -136,21 +150,18 @@ document.addEventListener('DOMContentLoaded', function() {
       const body = container.querySelector('.card-body');
       if (!body) return;
 
-      // update the small summary text that shows portion currently used
-      const portionSummary = body.querySelector('p.mt-2');
-      if (portionSummary) {
-        portionSummary.innerHTML = `Porções por embalagem: -- <br> Porção: ${t.portionSize || 50} g`;
-      }
-
       // clear existing rows/content (keep header if present)
       // we'll build a simple ingredients list and a small nutrition summary per item
       const content = document.createElement('div');
       content.className = 'table-content';
 
+      const ingredientsBlock = document.createElement('div');
+      ingredientsBlock.className = 'ingredients-block';
+
       const ingHeader = document.createElement('h5');
       ingHeader.className = 'fw-bold mb-3';
       ingHeader.textContent = 'Ingredientes';
-      content.appendChild(ingHeader);
+      ingredientsBlock.appendChild(ingHeader);
 
       const list = document.createElement('ul');
       list.className = 'list-group mb-4';
@@ -189,7 +200,8 @@ document.addEventListener('DOMContentLoaded', function() {
         list.appendChild(li);
       });
 
-      content.appendChild(list);
+      ingredientsBlock.appendChild(list);
+      content.appendChild(ingredientsBlock);
 
       // compute nutrition totals using rule-of-three
       const nutrientsKeys = [
@@ -243,43 +255,50 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       });
 
-      // create nutrition summary block
-      const nutCard = document.createElement('div');
-      nutCard.className = 'card mb-4';
-      const nutBody = document.createElement('div');
-      nutBody.className = 'card-body';
+      const tableHeader = document.createElement('div');
+      tableHeader.className = 'table-header';
+      const headerTitleWrapper = document.createElement('div');
+      const tableTitleEl = document.createElement('h5');
+      tableTitleEl.className = 'table-title';
+      tableTitleEl.textContent = 'INFORMAÇÃO NUTRICIONAL';
+      headerTitleWrapper.appendChild(tableTitleEl);
+      tableHeader.appendChild(headerTitleWrapper);
+      content.appendChild(tableHeader);
 
-  const nutHeader = document.createElement('h5');
-  nutHeader.className = 'card-title mb-3';
-  nutHeader.textContent = 'Resumo Nutricional (por 100 g, 25 g e por porção)';
-      nutBody.appendChild(nutHeader);
+      const portionMeta = document.createElement('p');
+      portionMeta.className = 'table-summary';
+      content.appendChild(portionMeta);
 
-      // table-like grid
-  const grid = document.createElement('div');
-  grid.className = 'table-grid header-row mb-2';
-  grid.innerHTML = `<div class="fw-bold">Informação</div><div class="fw-bold text-end">Por 100 g</div><div class="fw-bold text-end">Por 25 g</div><div class="fw-bold text-end">Por porção (${Number(t.portionSize||50)} g)</div><div class="fw-bold text-end">%VD*</div>`;
-      nutBody.appendChild(grid);
+      const grid = document.createElement('div');
+      grid.className = 'table-grid header-row mb-2';
+      grid.innerHTML = `<div>Informação</div><div>Por 100 g</div><div>Porção</div><div>%VD*</div>`;
+      content.appendChild(grid);
 
       const nutContainer = document.createElement('div');
       nutContainer.id = 'nutrient-summary-rows';
+      content.appendChild(nutContainer);
+
+      const footnote = document.createElement('p');
+      footnote.className = 'table-footnote';
+      footnote.textContent = '*Percentual de valores diários fornecidos pela porção.';
+      content.appendChild(footnote);
 
       function renderNutritionRows(portionSize) {
         nutContainer.innerHTML = '';
         const ps = Number(portionSize) || Number(t.portionSize) || 50;
+        portionMeta.innerHTML = `Porções por embalagem: -- <br> Porção: ${ps} g`;
 
         nutrientsKeys.forEach(n => {
           const totalForRecipe = totals[n.key] || 0;
           const per100g = totalWeight > 0 ? (totalForRecipe / totalWeight) * 100 : 0;
-          const per25g = per100g * 0.25;
           const perPortion = totalWeight > 0 ? totalForRecipe * (ps / totalWeight) : 0;
 
-          const showValue = (v) => (v === null || v === undefined || isNaN(v)) ? '—' : (Number(v) === 0 ? '0.0' : fmt(v));
+          const showValue = (v) => (v === null || v === undefined || isNaN(v)) ? '--' : (Number(v) === 0 ? '0,0' : fmt(v));
 
           const row = document.createElement('div');
           row.className = 'table-grid data-row';
           row.setAttribute('data-nutrient', n.label);
-          row.dataset.g = per100g;
-          row.dataset.g25 = per25g;
+          row.dataset.per100 = per100g;
           row.dataset.portion = perPortion;
           // compute %VD for the portion using VD_REF when available
           const vdValue = VD_REF[n.key] ?? null;
@@ -291,19 +310,13 @@ document.addEventListener('DOMContentLoaded', function() {
           }
           row.dataset.vd = vdPercent;
           row.dataset.unit = n.unit || '';
-          // show %VD without the percent sign as requested; the header marks it as "%VD*"
-          row.innerHTML = `<div>${n.label}</div><div class="text-end">${showValue(per100g)} ${n.unit}</div><div class="text-end">${showValue(per25g)} ${n.unit}</div><div class="text-end">${showValue(perPortion)} ${n.unit}</div><div class="text-end">${vdPercent === '-' ? '' : vdPercent}</div>`;
+          const vdDisplay = vdPercent === '-' ? '-' : `${vdPercent}%`;
+          row.innerHTML = `<div>${n.label}</div><div>${showValue(per100g)} ${n.unit}</div><div>${showValue(perPortion)} ${n.unit}</div><div>${vdDisplay}</div>`;
           nutContainer.appendChild(row);
         });
       }
 
       renderNutritionRows(t.portionSize || 50);
-      nutBody.appendChild(nutContainer);
-
-      const footnote = document.createElement('p');
-      footnote.className = 'table-footnote';
-      footnote.textContent = '*Percentual de valores di\u00E1rios fornecidos pela por\u00E7\u00E3o.';
-      nutBody.appendChild(footnote);
 
       // wire portion input to re-render per portion values on change
       const portionInputEl = document.getElementById('portion');
@@ -353,9 +366,6 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
       }
-
-      nutCard.appendChild(nutBody);
-      content.appendChild(nutCard);
 
       // replace body content while keeping header elements like .table-header if present
       // remove everything inside body and append our content
