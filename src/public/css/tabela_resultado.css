@@ -9,6 +9,8 @@
   --text-muted: #64748b;
   --border-color: #e2e8f0;
   --soft-green-bg: #e6f6ee;
+  --table-line-color: #231f20;
+  --table-line-width: 0.333px;
   
   /* Cores Globais e AJUSTE de 90% */
   --sidebar-w: 216px; /* Original: 240px */
@@ -141,7 +143,7 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
   justify-content: center;
   align-items: center;
   gap: 0.35rem;
-  border-bottom: 2px solid var(--text-primary);
+  border-bottom: var(--table-line-width) solid var(--table-line-color);
   padding-bottom: 0.5rem;
   text-align: center;
 }
@@ -160,8 +162,9 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 .nutritional-table .table-grid {
   display: grid;
   grid-template-columns: 2.5fr 1fr 1fr 1fr;
-  gap: 1rem;
-  padding: 0.5rem 0;
+  column-gap: 0;
+  row-gap: 0;
+  padding: 0;
   font-size: 10.67px; /* 8pt */
   align-items: center;
 }
@@ -169,6 +172,11 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
   display: flex;
   align-items: center;
   min-height: 30px;
+  padding: 0.5rem 0.65rem;
+  border-left: var(--table-line-width) solid var(--table-line-color);
+}
+.nutritional-table .table-grid > div:first-child {
+  border-left: none;
 }
 .nutritional-table .table-grid > div:first-child {
   justify-content: flex-start;
@@ -182,7 +190,7 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
   font-weight: 400 !important;
 }
 .nutritional-table .data-row {
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: var(--table-line-width) solid var(--table-line-color);
   font-size: 10.67px; /* 8pt */
 }
 .nutritional-table .data-row:last-of-type {
@@ -196,7 +204,7 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 }
 
 .nutritional-table .table-footnote {
-  border-top: 2px solid var(--text-primary);
+  border-top: var(--table-line-width) solid var(--table-line-color);
   margin-top: 0.75rem;
   padding-top: 0.35rem;
   font-size: 8px; /* 6pt */
@@ -217,7 +225,7 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 }
 .pdf-export-style, .pdf-export-style * {
   color: #000000 !important;
-  border-color: #777777 !important;
+  border-color: #231f20 !important;
 }
 .pdf-export-style .badge {
   background-color: #eeeeee !important;
@@ -228,22 +236,29 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
   display: none !important;
 }
 .pdf-export-style .table-header {
-  border-bottom-width: 3px !important;
+  border-bottom: var(--table-line-width) solid #231f20 !important;
   align-items: center !important;
   text-align: center !important;
 }
 .pdf-export-style .data-row {
-  border-bottom-width: 1px !important;
+  border-bottom: var(--table-line-width) solid #231f20 !important;
 }
 .pdf-export-style .data-row:last-of-type {
   border-bottom-width: 0 !important;
 }
 .pdf-export-style .table-grid {
   padding: 0.3rem 0;
+  column-gap: 0 !important;
+  row-gap: 0 !important;
   font-size: 10.67px !important;
 }
 .pdf-export-style .table-grid > div {
   min-height: 28px !important;
+  padding: 0.4rem 0.6rem !important;
+  border-left: var(--table-line-width) solid #231f20 !important;
+}
+.pdf-export-style .table-grid > div:first-child {
+  border-left: none !important;
 }
 .pdf-export-style .table-title {
   font-size: 13.33px !important;
@@ -252,7 +267,7 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
   font-size: 10.67px !important;
 }
 .pdf-export-style .table-footnote {
-  border-top: 2px solid #000000 !important;
+  border-top: var(--table-line-width) solid #231f20 !important;
   color: #000000 !important;
   font-size: 8px !important;
 }
