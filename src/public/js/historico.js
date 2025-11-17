@@ -22,6 +22,16 @@ document.addEventListener('DOMContentLoaded', function() {
   if(sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
   if(overlay) overlay.addEventListener('click', closeSidebar);
 
+  const API_WARNING = window.getApiWarningMessage
+    ? window.getApiWarningMessage()
+    : 'Funcionalidade indisponível sem backend configurado.';
+
+  function buildApiUrl(path) {
+    return window.getApiUrlOrWarn
+      ? window.getApiUrlOrWarn(path, () => alert(API_WARNING))
+      : path;
+  }
+
   // --- FETCH USER TABLES (HISTÓRICO) ---
   async function loadHistory() {
     try {
@@ -33,7 +43,9 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
 
-      const res = await fetch('/api/tables', { headers: { 'Authorization': `Bearer ${token}` } });
+      const listUrl = buildApiUrl('/api/tables');
+      if (!listUrl) return;
+      const res = await fetch(listUrl, { headers: { 'Authorization': `Bearer ${token}` } });
       if (!res.ok) throw new Error('Falha ao carregar histórico');
       const json = await res.json();
       const tables = json.tables || [];
@@ -77,7 +89,9 @@ document.addEventListener('DOMContentLoaded', function() {
           const id = btn.getAttribute('data-id');
           if (!confirm('Deseja excluir esta tabela?')) return;
           try {
-            const del = await fetch(`/api/tables/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+            const deleteUrl = buildApiUrl(`/api/tables/${id}`);
+            if (!deleteUrl) return;
+            const del = await fetch(deleteUrl, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
             if (!del.ok) throw new Error('Falha ao excluir');
             // reload
             loadHistory();
@@ -112,7 +126,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!token) { alert('Você precisa estar logado para duplicar.'); return; }
 
             // fetch the original table
-            const getRes = await fetch(`/api/tables/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+            const getUrl = buildApiUrl(`/api/tables/${id}`);
+            if (!getUrl) return;
+            const getRes = await fetch(getUrl, { headers: { 'Authorization': `Bearer ${token}` } });
             if (!getRes.ok) throw new Error('Falha ao buscar tabela original');
             const gj = await getRes.json();
             const orig = gj.table || gj;
@@ -127,7 +143,9 @@ document.addEventListener('DOMContentLoaded', function() {
               items,
             };
 
-            const createRes = await fetch('/api/tables', {
+            const createUrl = buildApiUrl('/api/tables');
+            if (!createUrl) return;
+            const createRes = await fetch(createUrl, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
               body: JSON.stringify(payload)

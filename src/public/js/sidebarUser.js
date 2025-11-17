@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ev.preventDefault();
         try { localStorage.removeItem('user'); sessionStorage.removeItem('user'); } catch (e) {}
         // redirect to login page
-        window.location.href = '/login.html';
+        window.location.href = 'login.html';
       });
     });
   } catch (e) {

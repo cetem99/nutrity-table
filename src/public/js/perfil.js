@@ -29,6 +29,15 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   const token = userData.token;
   const userId = userData.userId;
+  const API_WARNING = window.getApiWarningMessage
+    ? window.getApiWarningMessage()
+    : 'Funcionalidade indisponível sem um backend configurado.';
+
+  function buildApiUrl(path) {
+    return window.getApiUrlOrWarn
+      ? window.getApiUrlOrWarn(path, () => alert(API_WARNING))
+      : path;
+  }
 
   const nameInput = document.getElementById('fullName');
   const emailInput = document.getElementById('email');
@@ -38,7 +47,9 @@ document.addEventListener('DOMContentLoaded', async function() {
   // Use the protected route /api/users/profile which reads the user from the token (req.userId)
   async function carregarPerfil() {
     try {
-      const res = await fetch(`/api/users/profile`, {
+      const url = buildApiUrl(`/api/users/profile`);
+      if (!url) return;
+      const res = await fetch(url, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -69,7 +80,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     const email = emailInput.value.trim();
 
     try {
-      const res = await fetch(`/api/users/profile`, {
+      const url = buildApiUrl(`/api/users/profile`);
+      if (!url) return;
+      const res = await fetch(url, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -116,7 +129,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     try {
       // profile controller now reads the user from the token (req.userId).
-      const res = await fetch(`/api/profile/password`, {
+      const url = buildApiUrl(`/api/profile/password`);
+      if (!url) return;
+      const res = await fetch(url, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -143,7 +158,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     try {
       // Use the protected delete route registered at /api/users/profile
-      const res = await fetch(`/api/users/profile`, {
+      const url = buildApiUrl(`/api/users/profile`);
+      if (!url) return;
+      const res = await fetch(url, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

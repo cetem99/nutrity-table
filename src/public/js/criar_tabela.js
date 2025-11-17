@@ -119,6 +119,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const ingredientList = document.getElementById('ingredient-list');
   const addIngredientBtn = document.getElementById('add-ingredient-btn');
 
+  const API_WARNING = window.getApiWarningMessage
+    ? window.getApiWarningMessage()
+    : 'Funcionalidade indisponível sem backend configurado.';
+
+  function buildApiUrl(path) {
+    return window.getApiUrlOrWarn
+      ? window.getApiUrlOrWarn(path, () => alert(API_WARNING))
+      : path;
+  }
+
   function debounce(fn, wait = 300) {
     let t;
     return (...args) => {
@@ -184,7 +194,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const q = (value || '').trim();
       try {
         // backend now returns a short list when query is empty
-        const res = await fetch(`/api/tables/search-food?query=${encodeURIComponent(q)}`);
+        const url = buildApiUrl(`/api/tables/search-food?query=${encodeURIComponent(q)}`);
+        if (!url) return;
+        const res = await fetch(url);
         if (!res.ok) { suggestionsContainer.innerHTML = ''; return; }
         const data = await res.json();
         renderSuggestions(data.names || []);
@@ -231,7 +243,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const userData = JSON.parse(localStorage.getItem('user')) || JSON.parse(sessionStorage.getItem('user')) || {};
       const token = userData.token;
       if (!token) { alert('Você precisa estar logado para editar uma tabela.'); window.location.href = 'login.html'; return; }
-      const res = await fetch(`/api/tables/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+      const url = buildApiUrl(`/api/tables/${id}`);
+      if (!url) return;
+      const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
       if (!res.ok) { alert('Falha ao carregar tabela para edição.'); return; }
       const json = await res.json();
       const t = json.table || json;
@@ -295,7 +309,9 @@ document.addEventListener('DOMContentLoaded', () => {
       let res;
       if (isEditMode && editId) {
         // update existing table
-        res = await fetch(`/api/tables/${encodeURIComponent(editId)}`, {
+        const url = buildApiUrl(`/api/tables/${encodeURIComponent(editId)}`);
+        if (!url) return;
+        res = await fetch(url, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -304,7 +320,9 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify({ title, base, portionSize, items })
         });
       } else {
-        res = await fetch('/api/tables', {
+        const url = buildApiUrl('/api/tables');
+        if (!url) return;
+        res = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

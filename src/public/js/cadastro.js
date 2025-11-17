@@ -2,6 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const togglePassword = document.getElementById("togglePassword");
   const passwordInput = document.getElementById("password");
   const signupForm = document.getElementById("signupForm");
+  const API_UNAVAILABLE_MESSAGE = window.getApiWarningMessage
+    ? window.getApiWarningMessage()
+    : "Cadastro indisponível na versão estática. Defina window.NUTRITY_API_BASE_URL com o endereço do backend (ex.: https://seu-backend.com) para habilitar o envio.";
 
   let showPassword = false;
 
@@ -47,7 +50,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
-      const response = await fetch("/api/users/register", {
+      const registerUrl = window.getApiUrlOrWarn
+        ? window.getApiUrlOrWarn("/api/users/register", () => alert(API_UNAVAILABLE_MESSAGE))
+        : "/api/users/register";
+      if (!registerUrl) return;
+
+      const response = await fetch(registerUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),

@@ -94,6 +94,16 @@ document.addEventListener('DOMContentLoaded', function() {
   let currentTableId = null;
   let currentTable = null;
 
+  const API_WARNING = window.getApiWarningMessage
+    ? window.getApiWarningMessage()
+    : 'Funcionalidade indisponível sem backend configurado.';
+
+  function buildApiUrl(path) {
+    return window.getApiUrlOrWarn
+      ? window.getApiUrlOrWarn(path, () => alert(API_WARNING))
+      : path;
+  }
+
   async function loadTableFromQuery() {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -104,7 +114,9 @@ document.addEventListener('DOMContentLoaded', function() {
       const token = userData.token;
       if (!token) return;
 
-      const res = await fetch(`/api/tables/${id}`, { headers: { 'Authorization': `Bearer ${token}` } });
+      const url = buildApiUrl(`/api/tables/${id}`);
+      if (!url) return;
+      const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
       if (!res.ok) {
         console.error('Failed to load table', await res.text());
         return;
@@ -331,7 +343,12 @@ document.addEventListener('DOMContentLoaded', function() {
           const newPortion = Number(portionEl?.value) || 0;
           saveBtn.disabled = true;
           try {
-            const res = await fetch(`/api/tables/${currentTableId}`, {
+            const url = buildApiUrl(`/api/tables/${currentTableId}`);
+            if (!url) {
+              saveBtn.disabled = false;
+              return;
+            }
+            const res = await fetch(url, {
               method: 'PUT',
               headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
               body: JSON.stringify({ portionSize: newPortion })

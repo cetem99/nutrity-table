@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("loginForm");
   const emailInput = document.getElementById("email");
   const rememberMeCheckbox = document.getElementById("rememberMe");
+  const API_UNAVAILABLE_MESSAGE = window.getApiWarningMessage
+    ? window.getApiWarningMessage()
+    : "Login indisponível na versão estática. Defina window.NUTRITY_API_BASE_URL com o endereço do backend (ex.: https://seu-backend.com) para habilitar o acesso.";
 
   // Verificar se há credenciais salvas
   function checkSavedCredentials() {
@@ -61,7 +64,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const rememberMe = document.getElementById("rememberMe").checked;
 
     try {
-      const response = await fetch("/api/users/login", {
+      const loginUrl = window.getApiUrlOrWarn
+        ? window.getApiUrlOrWarn("/api/users/login", () => alert(API_UNAVAILABLE_MESSAGE))
+        : "/api/users/login";
+      if (!loginUrl) return;
+
+      const response = await fetch(loginUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
