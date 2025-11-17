@@ -311,3 +311,19 @@ label input[type="checkbox"] {
     align-items: flex-start;
   }
 }
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  gap: 0.5rem;
+  color: var(--primary);
+  text-decoration: none;
+  margin: 0 auto;
+}
+
+.brand i {
+  font-size: 1.6rem;
+}
