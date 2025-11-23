@@ -9,14 +9,16 @@
   --text-muted: #64748b;
   --border-color: #e2e8f0;
   --soft-green-bg: #e6f6ee;
+  
+  /* Variáveis da Tabela */
   --table-line-color: #231f20;
   --table-line-width: 0.333px;
   --table-info-separator-width: 4px;
   --table-section-separator-width: 4px;
   
-  /* Cores Globais e AJUSTE de 90% */
-  --sidebar-w: 216px; /* Original: 240px */
-  --navbar-h: 58px;  /* Original: 64px */
+  /* Globais */
+  --sidebar-w: 216px;
+  --navbar-h: 58px;
   --nt-green: #1f8a3e;
   --card-radius: 12px;
 }
@@ -28,30 +30,15 @@
   --text-muted: #94a3b8;
   --border-color: #334155;
   --soft-green-bg: #163426;
-}
-[data-bs-theme="dark"] .btn-outline-secondary {
-  --bs-btn-color: var(--bs-secondary-color);
-  --bs-btn-border-color: var(--bs-border-color);
-  --bs-btn-hover-color: var(--bs-body-bg);
-  --bs-btn-hover-bg: var(--bs-secondary-color);
-  --bs-btn-hover-border-color: var(--bs-secondary-color);
-  --bs-btn-active-color: var(--bs-body-bg);
-  --bs-btn-active-bg: var(--bs-secondary-color);
-  --bs-btn-active-border-color: var(--bs-secondary-color);
-}
-/* AJUSTE PRINCIPAL: Diminui a escala de todo o site em 10% */
-html {
-  font-size: 90%;
+  --table-line-color: #94a3b8; 
 }
 
-/* =============================================== */
-/* ESTILOS COMUNS (Base para todas as páginas)     */
-/* =============================================== */
+html { font-size: 80%; }
 * { box-sizing: border-box; }
 body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--text-primary); transition: background-color 0.3s, color 0.3s; }
 .text-muted { color: var(--text-muted) !important; }
 
-/* --- Componentes com Tema --- */
+/* --- Componentes Globais --- */
 #sidebar, .card, .form-control, .form-select, .top-navbar, .mobile-header, .btn-light {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -60,45 +47,97 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 }
 .card, .form-control, .form-select { box-shadow: none !important; }
 .form-control::placeholder { color: var(--text-muted); }
-.form-select { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e"); }
-[data-theme="dark"] .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
 
-/* --- Estrutura da Sidebar --- */
-#sidebar { 
-  position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); 
-  display: flex; flex-direction: column; z-index: 1200; 
+/* =============================================== */
+/* CORREÇÃO DARK MODE (ELEMENTOS INTERNOS)         */
+/* =============================================== */
+
+/* 1. Força Texto Claro no Modo Escuro (Corrige o problema da foto) */
+[data-theme="dark"] .text-body {
+  color: var(--text-primary) !important;
 }
+[data-theme="dark"] .text-body-secondary {
+  color: var(--text-muted) !important;
+}
+
+/* 2. Formulários e Botões */
+[data-theme="dark"] .form-control, 
+[data-theme="dark"] .form-select {
+  background-color: #0f1724;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+[data-theme="dark"] .form-control:focus {
+  background-color: #0f1724;
+  border-color: var(--nt-green);
+  color: #fff;
+}
+[data-theme="dark"] .btn-outline-secondary { color: #94a3b8; border-color: #334155; }
+[data-theme="dark"] .btn-outline-secondary:hover { background-color: #334155; color: #fff; }
+[data-theme="dark"] .badge.text-bg-light {
+  background-color: #0f1724 !important;
+  color: #f1f5f9 !important;
+  border: 1px solid #334155;
+}
+
+/* 3. Lista de Ingredientes */
+.list-group-item {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+[data-theme="dark"] .list-group-item {
+  background-color: #1e293b; 
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+/* 4. Selos e Imagens (Inversão) */
+[data-theme="dark"] .selos-gallery img {
+  filter: invert(1) hue-rotate(180deg); 
+  border-color: #334155;
+  background-color: transparent; 
+}
+
+/* 5. Lupa Anvisa */
+.anvisa-seal {
+  border: 2px solid var(--text-primary);
+  background-color: var(--text-primary);
+  color: var(--bg);
+  padding: 0.5rem 1rem;
+  display: flex; align-items: center; gap: 1rem;
+  max-width: 240px; border-radius: 4px;
+}
+[data-theme="dark"] .anvisa-seal {
+  background-color: transparent;
+  border: 2px solid #f1f5f9;
+  color: #f1f5f9;
+}
+
+/* --- Sidebar e Layout --- */
+#sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); display: flex; flex-direction: column; z-index: 1200; }
 .sidebar-top { padding: 1rem; border-bottom: 1px solid var(--border-color); }
-.brand { font-weight: 700; font-size: 1.1rem; color: var(--text-primary); }
-.subtitle { font-size: 1rem; color: var(--text-muted); }
-.nav-heading { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; padding: 0.5rem 1rem; letter-spacing: .5px; }
-.nav-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; margin: 2px 8px; border-radius: 8px; color: var(--text-muted); font-size: 1.1rem; font-weight: 500; text-decoration: none; }
-.nav-link i { font-size: 1.2rem; width: 22px; text-align: center; }
-.nav-link:hover { background: rgba(127,127,127, 0.08); }
+.brand { font-weight: 700; font-size: 1.1rem; }
+.nav-heading { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; padding: 0.5rem 1rem; }
+.nav-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; margin: 2px 8px; border-radius: 8px; color: var(--text-muted); font-size: 1.1rem; text-decoration: none; }
 .nav-link.active { background: var(--soft-green-bg); color: var(--nt-green); font-weight: 600; }
 .sidebar-bottom { margin-top: auto; border-top: 1px solid var(--border-color); }
-.logout { color: #ef4444; font-weight: 600; text-decoration: none; font-size: 1.1rem; }
-.logo-nt { width: 44px; height: 44px; border-radius: 50%; background: var(--nt-green); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+.logo-nt { width: 44px; height: 44px; border-radius: 50%; background: var(--nt-green); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; }
 
-/* --- Layout Principal --- */
 #main { margin-left: var(--sidebar-w); padding-top: var(--navbar-h); }
 .top-navbar { position: fixed; top: 0; left: var(--sidebar-w); right: 0; height: var(--navbar-h); display: flex; align-items: center; z-index: 1100; padding: 0 1.5rem; }
 .mobile-header { display: none; }
 #sidebar-overlay { display: none; }
 
 @media (max-width: 991.98px) {
-  /* AJUSTE: Voltamos a 100% de escala para legibilidade no celular */
-  html {
-    font-size: 80%;
-  }
-
+  html { font-size: 90%; }
   #sidebar { transform: translateX(-100%); transition: transform 0.3s ease-in-out; }
   #sidebar.is-open { transform: translateX(0); box-shadow: 0 0 25px rgba(0,0,0,0.1); }
-  .mobile-header { position: fixed; top: 0; left: 0; right: 0; height: 60px; display: flex; align-items: center; padding: 0 1rem; z-index: 1050; gap: 1rem; }
+  .mobile-header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: var(--bg-card); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 0 1rem; z-index: 1050; gap: 1rem; }
   .mobile-logo { display: flex; align-items: center; }
   .mobile-logo .logo-nt { width: 36px; height: 36px; font-size: 0.9rem; }
-  #sidebar-toggle { font-size: 1.75rem; color: var(--text-primary); }
-  #sidebar-overlay { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1199; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; background-color: rgba(0,0,0,0.5); }
+  #sidebar-toggle { font-size: 1.75rem; color: var(--text-primary); background: none; border: none; }
+  #sidebar-overlay { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 1199; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
   #sidebar-overlay.is-visible { opacity: 1; visibility: visible; }
   #main { margin-left: 0; padding-top: 60px; }
 }
@@ -106,194 +145,96 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 /* =============================================== */
 /* PÁGINA: RESULTADO DA TABELA                     */
 /* =============================================== */
-.result-container {
-  max-width: 800px;
-  margin: 0 auto;
-}
-.anvisa-seal {
-  border: 2px solid var(--text-primary);
-  background-color: var(--text-primary);
-  color: var(--bg); /* Inverte as cores de fundo e texto */
-  padding: 0.5rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  max-width: 240px;
-  border-radius: 4px;
-}
-.seal-icon {
-  width: 32px;
-  height: 32px;
-  fill: currentColor; /* Faz o ícone SVG herdar a cor do texto */
-}
-.seal-title {
-  font-size: 0.9rem;
-  font-weight: bold;
-  line-height: 1;
-}
-.seal-nutrient {
-  font-size: 1.1rem;
-  font-weight: bold;
-  line-height: 1.2;
-}
-.selos-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
-}
-.selos-gallery img {
-  max-height: 120px;
-  border: 1px solid var(--table-line-color);
-  border-radius: 8px;
-  background: #ffffff;
-  padding: 0.4rem;
-}
-.nutritional-table {
-  font-family: Arial, Helvetica, sans-serif;
-}
+.result-container { max-width: 800px; margin: 0 auto; }
+
+.seal-icon { width: 32px; height: 32px; fill: currentColor; }
+.seal-title { font-size: 0.9rem; font-weight: bold; line-height: 1; }
+.seal-nutrient { font-size: 1.1rem; font-weight: bold; line-height: 1.2; }
+
+.selos-gallery { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+.selos-gallery img { max-height: 120px; border: 1px solid var(--border-color); border-radius: 8px; background: #fff; padding: 0.4rem; }
+
+/* Tabela Visual (Na tela) */
+.nutritional-table { font-family: Arial, Helvetica, sans-serif; }
 .nutritional-table .table-header {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.35rem;
-  border-bottom: var(--table-line-width) solid var(--table-line-color);
-  padding-bottom: 0.5rem;
-  text-align: center;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  gap: 0.35rem; border-bottom: var(--table-line-width) solid var(--table-line-color);
+  padding-bottom: 0.5rem; text-align: center;
 }
-.nutritional-table .table-title {
-  font-size: 13.33px; /* 10pt */
-  font-weight: 700;
-  text-transform: uppercase;
-  margin: 0;
-}
-.nutritional-table .table-summary {
-  font-size: 10.67px; /* 8pt */
-  line-height: 1.3;
-  margin: 0.35rem 0 0;
-  text-align: center;
-}
+.nutritional-table .table-title { font-size: 13.33px; font-weight: 700; text-transform: uppercase; margin: 0; }
+.nutritional-table .table-summary { font-size: 10.67px; line-height: 1.3; margin: 0.35rem 0 0; text-align: center; }
+
 .nutritional-table .table-grid {
-  display: grid;
-  grid-template-columns: 2.5fr 1fr 1fr 1fr;
-  column-gap: 0;
-  row-gap: 0;
-  padding: 0;
-  font-size: 10.67px; /* 8pt */
-  align-items: center;
+  display: grid; grid-template-columns: 2.5fr 1fr 1fr 1fr;
+  align-items: center; padding: 0; font-size: 10.67px;
 }
 .nutritional-table .table-grid > div {
-  display: flex;
-  align-items: center;
-  min-height: 30px;
-  padding: 0.5rem 0.65rem;
+  display: flex; align-items: center; min-height: 30px; padding: 0.5rem 0.65rem;
   border-left: var(--table-line-width) solid var(--table-line-color);
 }
-.nutritional-table .table-grid > div:first-child {
-  border-left: none;
-}
-.nutritional-table .table-grid > div:first-child {
-  justify-content: flex-start;
-  text-align: left;
-}
-.nutritional-table .table-grid > div:not(:first-child) {
-  justify-content: center;
-  text-align: center;
-}
-.nutritional-table .table-grid.header-row > div {
-  font-weight: 400 !important;
-}
+.nutritional-table .table-grid > div:first-child { border-left: none; justify-content: flex-start; text-align: left; }
+.nutritional-table .table-grid > div:not(:first-child) { justify-content: center; text-align: center; }
+
+.nutritional-table .table-grid.header-row > div { font-weight: 400 !important; }
 .nutritional-table .table-grid.header-row {
   border-bottom: var(--table-section-separator-width) solid var(--table-line-color);
   margin-bottom: 0.25rem;
 }
-.nutritional-table .data-row {
-  border-bottom: var(--table-line-width) solid var(--table-line-color);
-  font-size: 10.67px; /* 8pt */
-}
-.nutritional-table .data-row:last-of-type {
-  border-bottom: none;
-}
-.nutritional-table .data-row.no-border {
-  border-bottom: none;
-}
-.nutritional-table .data-row.indented {
-  padding-left: 1rem;
-}
+.nutritional-table .data-row { border-bottom: var(--table-line-width) solid var(--table-line-color); font-size: 10.67px; }
+.nutritional-table .data-row:last-of-type { border-bottom: none; }
+.nutritional-table .data-row.indented { padding-left: 1rem; }
 
 .nutritional-table .table-footnote {
   border-top: var(--table-line-width) solid var(--table-line-color);
-  margin-top: 0.75rem;
-  padding-top: 0.35rem;
-  font-size: 8px; /* 6pt */
-  color: var(--text-muted);
-  text-align: left;
+  margin-top: 0.75rem; padding-top: 0.35rem; font-size: 8px; color: var(--text-muted); text-align: left;
 }
 
-/* =============================================== */
-/* ESTILO PARA EXPORTAÇÃO EM PDF                   */
-/* =============================================== */
-.pdf-export-style {
-  background: #ffffff !important;
-  padding: 1rem;
-  font-family: Arial, Helvetica, sans-serif;
-  width: 100% !important;
-  max-width: 520px;
+/* ========================================================================== */
+/* MODO PDF                                                                   */
+/* ========================================================================== */
+.pdf-mode {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+  border-radius: 0 !important;
+  font-family: 'Arial', sans-serif !important;
+  padding: 0 !important;
+  max-width: 500px !important;
   margin: 0 auto !important;
+  box-shadow: none !important;
 }
-.pdf-export-style, .pdf-export-style * {
+.pdf-mode .card-body { padding: 0 !important; }
+.pdf-mode .ingredients-block, .pdf-mode .badge, .pdf-mode .anvisa-seal, .pdf-mode .btn, .pdf-mode img { display: none !important; }
+
+.pdf-mode .table-header {
+  display: block !important; text-align: center !important; margin: 0 !important;
+  padding: 15px 10px 5px 10px !important;
+  border-bottom: 1.5px solid #000000 !important;
   color: #000000 !important;
-  border-color: #231f20 !important;
 }
-.pdf-export-style .badge {
-  background-color: #eeeeee !important;
-  color: #000000 !important;
-  border: 1px solid #bbbbbb !important;
+.pdf-mode .table-title { font-size: 14pt !important; font-weight: 800 !important; text-transform: uppercase !important; color: #000000 !important; }
+.pdf-mode .table-summary { text-align: center !important; color: #000000 !important; margin: 0 !important; padding: 0 10px 10px 10px !important; font-size: 10pt !important; line-height: 1.2 !important; }
+
+.pdf-mode .table-grid {
+  display: grid !important; grid-template-columns: 3fr 1.2fr 1.2fr 0.8fr !important;
+  border-bottom: 1px solid #000000 !important;
+  border-left: none !important; border-right: none !important;
+  padding: 0 !important; margin: 0 !important; background-color: transparent !important;
+  color: #000000 !important; border-radius: 0 !important; font-size: 10pt !important; align-items: stretch !important;
 }
-.pdf-export-style .ingredients-block {
-  display: none !important;
+.pdf-mode .table-grid > div {
+  border: none !important; padding: 6px 4px !important; display: flex !important; align-items: center !important; height: auto !important; min-height: 100% !important; color: #000000 !important;
 }
-.pdf-export-style .table-header {
-  border-bottom: var(--table-line-width) solid #231f20 !important;
-  align-items: center !important;
-  text-align: center !important;
+.pdf-mode .header-row {
+  background-color: transparent !important; color: #000000 !important; font-weight: 700 !important;
+  border-top: 4px solid #000000 !important; border-bottom: 1px solid #000000 !important; margin-top: 0 !important;
 }
-.pdf-export-style .data-row {
-  border-bottom: var(--table-line-width) solid #231f20 !important;
+.pdf-mode .table-grid > div:first-child { justify-content: flex-start !important; text-align: left !important; }
+.pdf-mode .table-grid > div:not(:first-child) { justify-content: center !important; text-align: center !important; }
+.pdf-mode .table-grid > div:nth-child(2), .pdf-mode .table-grid > div:nth-child(3), .pdf-mode .table-grid > div:nth-child(4) {
+  border-left: 1px solid #000000 !important; margin-left: -1px !important;
 }
-.pdf-export-style .data-row:last-of-type {
-  border-bottom-width: 0 !important;
-}
-.pdf-export-style .table-grid {
-  padding: 0.3rem 0;
-  column-gap: 0 !important;
-  row-gap: 0 !important;
-  font-size: 10.67px !important;
-}
-.pdf-export-style .table-grid > div {
-  min-height: 28px !important;
-  padding: 0.4rem 0.6rem !important;
-  border-left: var(--table-line-width) solid #231f20 !important;
-}
-.pdf-export-style .table-grid > div:first-child {
-  border-left: none !important;
-}
-.pdf-export-style .table-grid > div:nth-child(2) {
-  border-left: var(--table-info-separator-width) solid #231f20 !important;
-}
-.pdf-export-style .table-grid.header-row {
-  border-bottom: var(--table-section-separator-width) solid #231f20 !important;
-  margin-bottom: 0.25rem !important;
-}
-.pdf-export-style .table-title {
-  font-size: 13.33px !important;
-}
-.pdf-export-style .table-summary {
-  font-size: 10.67px !important;
-}
-.pdf-export-style .table-footnote {
-  border-top: var(--table-line-width) solid #231f20 !important;
-  color: #000000 !important;
-  font-size: 8px !important;
+.pdf-mode .data-row:last-of-type { border-bottom: none !important; }
+.pdf-mode .table-footnote {
+  color: #000000 !important; font-size: 8pt !important; border-top: 1px solid #000000 !important; margin: 0 !important; padding: 4px 10px !important;
 }

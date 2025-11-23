@@ -61,7 +61,7 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 .nav-heading { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; padding: 0.5rem 1rem; letter-spacing: .5px; }
 .nav-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; margin: 2px 8px; border-radius: 8px; color: var(--text-muted); font-size: 1.1rem; font-weight: 500; text-decoration: none; }
 .nav-link i { font-size: 1.2rem; width: 22px; text-align: center; }
-.nav-link:hover { background: rgba(127,127,127, 0.08); }
+.nav-link:hover { background: rgba(127,127,127, 0.08); }z
 .nav-link.active { background: var(--soft-green-bg); color: var(--nt-green); font-weight: 600; }
 .sidebar-bottom { margin-top: auto; border-top: 1px solid var(--border-color); }
 .logout { color: #ef4444; font-weight: 600; text-decoration: none; font-size: 1.1rem; }

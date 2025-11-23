@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/', protect, createTable);
 router.get('/', protect, listTables);
 // public search endpoint to autocomplete ingredient names from DB
-// public endpoints: food info and search for autocomplete
+// public endpoints: food; info and search for autocomplete
 router.get('/food', getFood);
 router.get('/search-food', searchFoods);
 

@@ -1,19 +1,18 @@
 /* =============================================== */
-/* DEFINIÇÃO DOS TEMAS (CLARO E ESCURO)            */
+/* DEFINIÇÃO DOS TEMAS E CORES                     */
 /* =============================================== */
 :root {
   /* Cores Claras */
-  --bg: #f8fbf9;
+  --bg: #f8fbf9; 
   --bg-card: #ffffff;
   --text-primary: #0f1724;
   --text-muted: #64748b;
   --border-color: #e2e8f0;
   --soft-green-bg: #e6f6ee;
   
-  /* Cores Globais e AJUSTE de 90% */
-  --sidebar-w: 216px; /* Original: 240px */
-  --navbar-h: 58px;  /* Original: 64px */
-  --nt-green: #1f8a3e;
+  --sidebar-w: 216px;
+  --navbar-h: 58px;
+  --nt-green: #1f8a3e; /* Cor verde principal */
   --card-radius: 12px;
 }
 
@@ -26,19 +25,12 @@
   --soft-green-bg: #163426;
 }
 
-/* AJUSTE PRINCIPAL: Diminui a escala de todo o site em 10% */
-html {
-  font-size: 80%;
-}
-
-/* =============================================== */
-/* ESTILOS COMUNS (Base para todas as páginas)     */
-/* =============================================== */
+html { font-size: 80%; }
 * { box-sizing: border-box; }
 body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--text-primary); transition: background-color 0.3s, color 0.3s; }
 .text-muted { color: var(--text-muted) !important; }
 
-/* --- Componentes com Tema --- */
+/* --- Componentes --- */
 #sidebar, .card, .form-control, .form-select, .top-navbar, .mobile-header, .btn-light {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
@@ -47,34 +39,57 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 }
 .card, .form-control, .form-select { box-shadow: none !important; }
 .form-control::placeholder { color: var(--text-muted); }
-.form-select { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e"); }
-[data-theme="dark"] .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
 
-/* --- Estrutura da Sidebar --- */
+/* =============================================== */
+/* CORREÇÃO DARK MODE (FORMULÁRIOS & INPUTS)       */
+/* =============================================== */
+[data-theme="dark"] .form-control, 
+[data-theme="dark"] .form-select {
+  background-color: #0f1724;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+  background-color: #0f1724;
+  border-color: var(--nt-green);
+  color: #fff;
+}
+[data-theme="dark"] .form-control::placeholder { color: #64748b; }
+[data-theme="dark"] .btn-light {
+  background-color: #0f1724;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+[data-theme="dark"] .btn-light:hover { background-color: #334155; }
+[data-theme="dark"] .btn-outline-secondary { color: #94a3b8; border-color: #334155; }
+[data-theme="dark"] .btn-outline-secondary:hover { background-color: #334155; color: #fff; }
+
+/* =============================================== */
+/* SIDEBAR E LAYOUT (CORREÇÃO DO BOTÃO SAIR)       */
+/* =============================================== */
 #sidebar { 
   position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); 
-  display: flex; flex-direction: column; z-index: 1200; 
+  display: flex; flex-direction: column; /* Essencial para o alinhamento vertical */
+  z-index: 1200; 
 }
 .sidebar-top { padding: 1rem; border-bottom: 1px solid var(--border-color); }
-.brand { font-weight: 700; font-size: 1.1rem; color: var(--text-primary); }
-.subtitle { font-size: 1rem; color: var(--text-muted); }
-.nav-heading { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; padding: 0.5rem 1rem; letter-spacing: .5px; }
-.nav-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; margin: 2px 8px; border-radius: 8px; color: var(--text-muted); font-size: 1.1rem; font-weight: 500; text-decoration: none; }
-.nav-link i { font-size: 1.2rem; width: 22px; text-align: center; }
-.nav-link:hover { background: rgba(127,127,127, 0.08); }
+.brand { font-weight: 700; font-size: 1.1rem; }
+.nav-heading { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; padding: 0.5rem 1rem; }
+.nav-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; margin: 2px 8px; border-radius: 8px; color: var(--text-muted); font-size: 1.1rem; text-decoration: none; }
 .nav-link.active { background: var(--soft-green-bg); color: var(--nt-green); font-weight: 600; }
-.sidebar-bottom { margin-top: auto; border-top: 1px solid var(--border-color); }
-.logout { color: #ef4444; font-weight: 600; text-decoration: none; font-size: 1.1rem; }
-.logo-nt { width: 44px; height: 44px; border-radius: 50%; background: var(--nt-green); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+.logo-nt { width: 44px; height: 44px; border-radius: 50%; background: var(--nt-green); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; }
 
-/* --- Layout Principal --- */
+/* --- CORREÇÃO: Botão Sair no rodapé --- */
+/* 'margin-top: auto' empurra este elemento para o final do container flex */
+.sidebar-bottom { margin-top: auto; border-top: 1px solid var(--border-color); }
+
 #main { margin-left: var(--sidebar-w); padding-top: var(--navbar-h); }
 .top-navbar { position: fixed; top: 0; left: var(--sidebar-w); right: 0; height: var(--navbar-h); display: flex; align-items: center; z-index: 1100; padding: 0 1.5rem; }
 .mobile-header { display: none; }
 #sidebar-overlay { display: none; }
 .main-content { padding-top: 2rem; padding-bottom: 4rem; }
 
-/* --- Layout Responsivo --- */
 @media (max-width: 991.98px) {
   /* AJUSTE: Voltamos a 100% de escala para legibilidade no celular */
   html {
@@ -83,76 +98,91 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 
   #sidebar { transform: translateX(-100%); transition: transform 0.3s ease-in-out; }
   #sidebar.is-open { transform: translateX(0); box-shadow: 0 0 25px rgba(0,0,0,0.1); }
-  .mobile-header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: #fff; border-bottom: 1px solid var(--soft-green); display: flex; align-items: center; padding: 0 1rem; z-index: 1050; gap: 1rem; }
+  .mobile-header { position: fixed; top: 0; left: 0; right: 0; height: 60px; display: flex; align-items: center; padding: 0 1rem; z-index: 1050; gap: 1rem; }
   .mobile-logo { display: flex; align-items: center; }
   .mobile-logo .logo-nt { width: 36px; height: 36px; font-size: 0.9rem; }
-  #sidebar-toggle { font-size: 1.75rem; color: #334155; }
-  #sidebar-overlay { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 1199; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+  #sidebar-toggle { font-size: 1.75rem; color: var(--text-primary); }
+  #sidebar-overlay { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1199; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; background-color: rgba(0,0,0,0.5); }
   #sidebar-overlay.is-visible { opacity: 1; visibility: visible; }
   #main { margin-left: 0; padding-top: 60px; }
-  .main-content { padding-top: 1rem; }
-  .shell-card { padding: 1.5rem; }
 }
 
-/* =============================================== */
-/* ESTILOS ESPECÍFICOS PARA criar_tabela.html      */
-/* =============================================== */
+
+/* --- Estilos dos Passos (Wizard) --- */
 .steps-wrap { display: flex; justify-content: center; margin-bottom: 1.5rem; }
 .steps { display: flex; align-items: center; gap: 1rem; }
 .step { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; color: #9aa3ad; font-size: 14px; min-width: 60px; }
 .step .circle { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; border: 2px solid #d6eedd; background: #fff; color: #4b5563; transition: all 0.3s ease; }
-.step .label { font-size: 14px; color: #4b5563; font-weight: 500; }
 .step:not(:last-child)::after { content: ""; position: absolute; height: 2px; width: calc(100% - 40px + 1rem); background: #e6f6ee; top: 20px; left: calc(50% + 20px + 0.5rem); transform: translateY(-50%); }
 .step.current .circle { background: var(--nt-green); color: #fff; border-color: var(--nt-green); }
-.step.current .label { color: var(--nt-green); font-weight: 600; }
-.shell-card { max-width: 840px; margin: 0 auto; border-radius: var(--card-radius); box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06); border: 1px solid rgba(15, 23, 42, 0.04); background: #fff; padding: 2.5rem; }
-.base-card { padding: 1.25rem; border-radius: 10px; border: 2px solid #e2e8f0; background: #fff; cursor: pointer; transition: all .2s; }
-.base-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(15,23,42,0.05); }
+
+/* CORREÇÃO DARK MODE: WIZARD */
+[data-theme="dark"] .step .circle { background-color: #1e293b; border-color: #334155; color: #94a3b8; }
+[data-theme="dark"] .step.current .circle { background-color: var(--nt-green); color: #fff; border-color: var(--nt-green); }
+[data-theme="dark"] .step:not(:last-child)::after { background-color: #334155; }
+
+/* --- Cartões de Base (TACO/USDA) --- */
+.shell-card { max-width: 840px; margin: 0 auto; border-radius: var(--card-radius); padding: 2.5rem; }
+.base-card-taco { padding: 1.25rem; border-radius: 10px; border: 2px solid #1f8a3e; background: #fff; cursor: pointer; transition: all .2s; }
+.base-card-usda { padding: 1.25rem; border-radius: 10px; border: 2px solid #2a2658; background: #fff; cursor: pointer; transition: all .2s; }
 .base-card.selected { border-color: var(--nt-green); box-shadow: 0 0 0 3px rgba(31, 138, 62, 0.1); background-color: #f8fbf9; }
-.base-title { font-weight: 700; font-size: 1.1rem; }
-.base-desc { color: var(--muted); font-size: 0.9rem; margin: 0; }
-.base-badge { font-size: 0.7rem; font-weight: 600; padding: .25em .6em; border-radius: 999px; border: 1px solid; }
-.base-badge.taco { background-color: #e6f6ee; color: var(--nt-green); border-color: #a3d9b8;}
-.base-badge.usda { background-color: #eef2ff; color: #4338ca; border-color: #c7d2fe; }
-.btn-continue { background: var(--nt-green); color: #fff; padding: 12px 32px; border-radius: 8px; font-weight: 600; opacity: 0.7; cursor: not-allowed; transition: all 0.2s; }
-.btn-continue:not(:disabled) { opacity: 1; cursor: pointer; }
+
+/* CORREÇÃO DARK MODE: CARTÕES DE BASE */
+[data-theme="dark"] .base-card-taco,
+[data-theme="dark"] .base-card-usda {
+  background-color: #1e293b;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+/* --- CORREÇÃO: Borda verde no card selecionado no modo escuro --- */
+[data-theme="dark"] .base-card.selected {
+  background-color: rgba(31, 138, 62, 0.15); /* Fundo verde translúcido */
+  border-color: var(--nt-green); /* Borda verde sólida */
+}
+[data-theme="dark"] .base-desc { color: #94a3b8 !important; }
+
+.btn-continue { background: var(--nt-green); color: #fff; padding: 12px 32px; border-radius: 8px; }
 .btn-continue:not(:disabled):hover { background: #197535; }
 
-/* --- NOVO LAYOUT PROFISSIONAL PARA A LISTA DE INGREDIENTES --- */
-.ingredient-row {
-  display: grid;
-  gap: 0.75rem;
-  align-items: flex-end;
-  margin-bottom: 0.75rem;
-}
+/* =============================================== */
+/* LAYOUT DOS INGREDIENTES (RESPONSIVO)            */
+/* =============================================== */
+.ingredient-row { display: grid !important; gap: 10px; align-items: start; }
 
-/* Layout para Telas Maiores (Desktop) */
+/* --- DESKTOP --- */
 @media (min-width: 768px) {
-  .ingredient-row {
-    grid-template-columns: 1fr 100px 120px 50px;
-  }
+  .ingredient-row { grid-template-columns: 1fr 110px 100px 50px; align-items: center; }
+  .ingredient-name-col { position: relative; }
 }
 
-/* Layout para Telas Menores (Mobile) */
+/* --- MOBILE --- */
 @media (max-width: 767.98px) {
   .ingredient-row {
-    grid-template-columns: 2fr 2fr 1fr;
-    border-top: 1px solid var(--soft-green); /* Usando variável existente */
-    padding-top: 1rem;
-    margin-bottom: 1rem;
+    grid-template-columns: 1fr 1fr 50px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    margin-bottom: 10px;
   }
-  .ingredient-row:first-child {
-    border-top: none;
-    padding-top: 0;
-  }
-  .ingredient-row .ingredient-name-col {
-    grid-column: 1 / -1;
-  }
-  .ingredient-row .form-label {
-    font-size: 0.875rem;
-    margin-bottom: 0.25rem;
-  }
-  .ingredient-row .remove-ingredient-btn {
-    padding: 0.55rem 0;
-  }
+  .ingredient-row .ingredient-name-col { grid-column: 1 / -1; margin-bottom: 5px; }
+  .ingredient-row input, .ingredient-row select, .ingredient-row button { height: 42px; }
 }
+
+/* --- AUTOCOMPLETE (SUGESTÕES) --- */
+.suggestions-container {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+/* CORREÇÃO DARK MODE: AUTOCOMPLETE */
+[data-theme="dark"] .suggestions-container { background-color: #1e293b; border-color: #334155; }
+[data-theme="dark"] .list-group-item { background-color: #1e293b; color: #f1f5f9; border-color: #334155; }
+[data-theme="dark"] .list-group-item:hover { background-color: #334155; }

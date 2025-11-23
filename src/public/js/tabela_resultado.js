@@ -13,8 +13,112 @@ document.addEventListener('DOMContentLoaded', function() {
   const exportCsvBtn = document.getElementById('export-csv-btn');
   const exportPdfBtn = document.getElementById('export-pdf-btn');
 
-  if (exportCsvBtn) {
-    exportCsvBtn.addEventListener('click', exportTableToCSV);
+if (exportCsvBtn) {
+    // Mudamos de CSV para Excel para poder ter bordas
+    exportCsvBtn.addEventListener('click', exportTableToExcel);
+    // Opcional: Mude o texto do botão visualmente se quiser
+    exportCsvBtn.innerHTML = '<i class="bi bi-file-earmark-excel me-1"></i> Exportar Excel';
+  }
+
+  // --- Nova Função: Gera Excel (.xls) com formatação visual ---
+  function exportTableToExcel() {
+      const productTitle = getProductTitle();
+      
+      // 1. Pegamos os dados da tela
+      const rows = document.querySelectorAll('#nutritional-table-data .data-row');
+      
+      let tableRows = '';
+      
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('div');
+        if(cells.length < 4) return;
+        
+        // Limpa o texto
+        const c1 = cells[0].textContent.trim();
+        const c2 = cells[1].textContent.trim();
+        const c3 = cells[2].textContent.trim();
+        const c4 = cells[3].textContent.trim();
+
+        tableRows += `
+          <tr>
+            <td style="border: 1px solid #000; padding: 5px;">${c1}</td>
+            <td style="border: 1px solid #000; text-align: center;">${c2}</td>
+            <td style="border: 1px solid #000; text-align: center;">${c3}</td>
+            <td style="border: 1px solid #000; text-align: center;">${c4}</td>
+          </tr>
+        `;
+      });
+
+      // 2. Montamos um HTML especial que o Excel entende como planilha
+      // Isso permite usar CSS (style) para definir as bordas grossas
+      const excelTemplate = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+        <head>
+          <meta charset="UTF-8">
+          <style>
+            body { font-family: Arial, sans-serif; }
+            table { border-collapse: collapse; width: 100%; }
+            .header { 
+                background-color: #f0f0f0; 
+                font-weight: bold; 
+                text-align: center;
+                border-top: 2px solid #000;
+                border-bottom: 2px solid #000;
+                border-left: 2px solid #000;
+                border-right: 2px solid #000;
+            }
+            .header td {
+                border: 1px solid #000;
+                padding: 10px;
+            }
+            .title {
+                font-size: 16px; 
+                font-weight: bold; 
+                text-align: center; 
+                border: 2px solid #000;
+                padding: 10px;
+                background-color: #fff;
+            }
+          </style>
+        </head>
+        <body>
+          <table>
+            <tr>
+              <td colspan="4" class="title">INFORMAÇÃO NUTRICIONAL</td>
+            </tr>
+            <tr>
+              <td colspan="4" style="text-align: center; border-left: 2px solid #000; border-right: 2px solid #000;">
+                 Porções por embalagem: -- <br> Porção: ${document.getElementById('portion').value} g
+              </td>
+            </tr>
+            
+            <tr class="header">
+              <td style="text-align: left;">Informação</td>
+              <td>Por 100 g</td>
+              <td>Por porção</td>
+              <td>%VD*</td>
+            </tr>
+            
+            ${tableRows}
+            
+            <tr>
+              <td colspan="4" style="font-size: 10px; border-top: 2px solid #000;">*Percentual de valores diários fornecidos pela porção.</td>
+            </tr>
+          </table>
+        </body>
+        </html>
+      `;
+
+      // 3. Cria o arquivo .xls (Excel)
+      const blob = new Blob([excelTemplate], { type: 'application/vnd.ms-excel' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      // Importante: Extensão .xls para o Windows abrir direto no Excel
+      link.download = `${productTitle}.xls`; 
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
   }
   if (exportPdfBtn) {
     exportPdfBtn.addEventListener('click', exportTableToPDF);
@@ -25,71 +129,92 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // --- Função para gerar PDF ---
-  function exportTableToPDF() {
+function exportTableToPDF() {
     const element = document.getElementById('nutritional-table-data');
     if (!element) return;
     const productTitle = getProductTitle();
 
+    // 1. Ocultar ingredientes (se quiser que saia só a tabela)
+    const ingredientsBlock = document.querySelector('.ingredients-block');
+    if (ingredientsBlock) ingredientsBlock.style.display = 'none';
+
+    // 2. ATIVAR MODO PDF (Transforma o visual apenas para a exportação)
+    element.classList.add('pdf-mode');
+
     const options = {
-      margin: 0.5,
+      margin: [0.5, 0.5], // Margens
       filename: `${productTitle}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { 
+        scale: 4, // Alta resolução
+        useCORS: true, 
+        letterRendering: true,
+        scrollY: 0 
+      },
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
 
-    // aplica estilo de exportação no próprio elemento
-    element.classList.add('pdf-export-style');
-    
-    html2pdf().from(element).set(options).save().then(() => {
-      element.classList.remove('pdf-export-style');
-    }).catch(() => {
-      element.classList.remove('pdf-export-style');
-    });
+    html2pdf().from(element).set(options).save()
+      .then(() => {
+        // 3. DESATIVAR MODO PDF (Volta ao visual bonito)
+        element.classList.remove('pdf-mode');
+        if (ingredientsBlock) ingredientsBlock.style.display = 'block';
+      })
+      .catch((err) => {
+        console.error(err);
+        element.classList.remove('pdf-mode');
+        if (ingredientsBlock) ingredientsBlock.style.display = 'block';
+      });
   }
 
-  // --- Função para gerar CSV ---
-    function exportTableToCSV() {
-      let csvContent = "data:text/csv;charset=utf-8,";
+  // --- Função para gerar CSV (Ajustada para ler os dados da tela corretamente) ---
+function exportTableToCSV() {
+      // 1. Definição do separador (Ponto e vírgula é o padrão para Excel em PT-BR)
+      const SEPARATOR = ";";
+      
+      // 2. Cabeçalho
       const headers = ["Nutriente", "Por 100 g", "Por porção (g)", "%VD*"];
-      csvContent += headers.join(",") + "\r\n";
+      let csvContent = headers.join(SEPARATOR) + "\r\n";
 
+      // 3. Pega as linhas de dados da tela atual
       const rows = document.querySelectorAll('#nutritional-table-data .data-row');
+      
       rows.forEach(row => {
-        // row children layout: [label, per100, perPortion, vd]
         const cells = row.querySelectorAll('div');
-        const nutrient = `"${row.dataset.nutrient}"`;
-        // helper to extract numeric portion before space (removes unit)
-        const extractNum = (text) => {
-          if (!text) return '';
-          const t = text.trim();
-          if (t === '—' || t === '') return '';
-          // usually '10,0 g' or '16,4' (vd). take first token and remove any non-digit/comma/dot
-          const first = t.split('\u00A0')[0].split(' ')[0];
-          return first.replace(/[^0-9,\.\-]/g, '');
+        if(cells.length < 4) return;
+
+        // Função auxiliar para limpar o texto e tratar aspas internas (se houver)
+        const clean = (text) => {
+          let t = text.textContent.trim();
+          // Se o texto tiver aspas, duplicamos elas para não quebrar o CSV (padrão CSV)
+          return t.replace(/"/g, '""');
         };
-        const per100Text = cells[1]?.textContent || '';
-        const perPortionText = cells[2]?.textContent || '';
-        const vdText = cells[3]?.textContent || row.dataset.vd || '';
 
-        const value100g = extractNum(per100Text);
-        const valuePortion = extractNum(perPortionText);
-        const valueVd = extractNum(vdText);
+        // Envolvemos os valores em aspas duplas para garantir segurança
+        const nutrient = `"${clean(cells[0])}"`;
+        const val100 = `"${clean(cells[1])}"`;
+        const valPortion = `"${clean(cells[2])}"`;
+        const valVD = `"${clean(cells[3])}"`;
 
-        const csvRow = [nutrient, value100g, valuePortion, valueVd].join(",");
-        csvContent += csvRow + "\r\n";
+        csvContent += [nutrient, val100, valPortion, valVD].join(SEPARATOR) + "\r\n";
       });
 
-      const encodedUri = encodeURI(csvContent);
+      const productTitle = getProductTitle();
+
+      // 4. CRÍTICO: Adicionamos o BOM (\uFEFF) no início para o Excel reconhecer os acentos (UTF-8)
+      const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+      
+      // Cria o link de download usando o Blob
+      const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `${getProductTitle()}.csv`);
-    
+      link.setAttribute("href", url);
+      link.setAttribute("download", `${productTitle}.csv`);
+      link.style.visibility = 'hidden';
+      
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    }
-
+  }
   // --- LOAD TABLE FROM ID ---
   let currentTableId = null;
   let currentTable = null;

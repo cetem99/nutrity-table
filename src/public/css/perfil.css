@@ -10,9 +10,9 @@
   --border-color: #e2e8f0;
   --soft-green-bg: #e6f6ee;
   
-  /* Cores Globais e AJUSTE de 90% */
-  --sidebar-w: 216px; /* Original: 240px */
-  --navbar-h: 58px;  /* Original: 64px */
+  /* Cores Globais */
+  --sidebar-w: 216px;
+  --navbar-h: 58px;
   --nt-green: #1f8a3e;
   --card-radius: 12px;
 }
@@ -26,38 +26,95 @@
   --soft-green-bg: #163426;
 }
 
-/* AJUSTE PRINCIPAL: Diminui a escala de todo o site em 10% */
+/* AJUSTE DE ESCALA */
 html {
   font-size: 80%;
 }
 
 /* =============================================== */
-/* ESTILOS COMUNS (Base para todas as páginas)     */
+/* ESTILOS GERAIS                                  */
 /* =============================================== */
 * { box-sizing: border-box; }
 body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--text-primary); transition: background-color 0.3s, color 0.3s; }
 .text-muted { color: var(--text-muted) !important; }
 
-/* --- Componentes com Tema --- */
-#sidebar, .card, .form-control, .form-select, .top-navbar, .mobile-header, .btn-light {
+/* --- Componentes Básicos --- */
+#sidebar, .card, .top-navbar, .mobile-header {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 }
-.card, .form-control, .form-select { box-shadow: none !important; }
-.form-control::placeholder { color: var(--text-muted); }
-.form-select { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e"); }
-[data-theme="dark"] .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
+.card { box-shadow: none !important; border-radius: var(--card-radius); }
 
-/* --- Estrutura da Sidebar --- */
+/* =============================================== */
+/* CORREÇÃO DE FORMULÁRIOS (CLARO E ESCURO)        */
+/* =============================================== */
+
+/* Estilo Padrão (Claro) */
+.form-control, .form-select {
+  background-color: #fff;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+/* Estilo Escuro (Dark Mode) - AQUI ESTAVA O PROBLEMA */
+[data-theme="dark"] .form-control, 
+[data-theme="dark"] .form-select {
+  background-color: #0f1724; /* Fundo escuro (igual ao body) */
+  border-color: #334155;
+  color: #f1f5f9; /* Texto claro */
+}
+
+/* Texto placeholder no modo escuro */
+[data-theme="dark"] .form-control::placeholder {
+  color: #64748b;
+}
+
+/* Estado de Foco (Quando clica) no modo escuro */
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+  background-color: #0f1724;
+  color: #ffffff;
+  border-color: var(--nt-green);
+  box-shadow: 0 0 0 0.25rem rgba(31, 138, 62, 0.25);
+}
+
+/* Botão de Olho (Toggle Password) no modo escuro */
+[data-theme="dark"] .toggle-password {
+  background-color: #0f1724; /* Mesma cor do input */
+  border-color: #334155;
+  color: #94a3b8;
+}
+[data-theme="dark"] .toggle-password:hover {
+  background-color: #1e293b;
+  color: #fff;
+}
+
+/* Botão Padrão (Outline Secondary) no modo escuro */
+[data-theme="dark"] .btn-outline-secondary {
+  color: #94a3b8;
+  border-color: #334155;
+}
+[data-theme="dark"] .btn-outline-secondary:hover {
+  background-color: #334155;
+  color: #fff;
+}
+
+/* Ícone de fechar (X) em modais ou alertas no escuro */
+[data-theme="dark"] .btn-close { 
+  filter: invert(1) grayscale(100%) brightness(200%); 
+}
+
+/* =============================================== */
+/* SIDEBAR E NAV                                   */
+/* =============================================== */
 #sidebar { 
   position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); 
   display: flex; flex-direction: column; z-index: 1200; 
 }
 .sidebar-top { padding: 1rem; border-bottom: 1px solid var(--border-color); }
 .brand { font-weight: 700; font-size: 1.1rem; color: var(--text-primary); }
-.subtitle { font-size: 1rem; color: var(--text-muted); }
 .nav-heading { font-size: 0.9rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; padding: 0.5rem 1rem; letter-spacing: .5px; }
 .nav-link { display: flex; align-items: center; gap: 12px; padding: 10px 14px; margin: 2px 8px; border-radius: 8px; color: var(--text-muted); font-size: 1.1rem; font-weight: 500; text-decoration: none; }
 .nav-link i { font-size: 1.2rem; width: 22px; text-align: center; }
@@ -67,7 +124,9 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 .logout { color: #ef4444; font-weight: 600; text-decoration: none; font-size: 1.1rem; }
 .logo-nt { width: 44px; height: 44px; border-radius: 50%; background: var(--nt-green); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
 
-/* --- Layout Principal --- */
+/* =============================================== */
+/* LAYOUT PRINCIPAL                                */
+/* =============================================== */
 #main { margin-left: var(--sidebar-w); padding-top: var(--navbar-h); }
 .top-navbar { position: fixed; top: 0; left: var(--sidebar-w); right: 0; height: var(--navbar-h); display: flex; align-items: center; z-index: 1100; padding: 0 1.5rem; }
 .mobile-header { display: none; }
@@ -75,17 +134,13 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 .main-content { padding-top: 2rem; padding-bottom: 4rem; }
 
 @media (max-width: 991.98px) {
-  /* AJUSTE: Voltamos a 100% de escala para legibilidade no celular */
-  html {
-    font-size: 90%;
-  }
-
+  html { font-size: 90%; }
   #sidebar { transform: translateX(-100%); transition: transform 0.3s ease-in-out; }
   #sidebar.is-open { transform: translateX(0); box-shadow: 0 0 25px rgba(0,0,0,0.1); }
-  .mobile-header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: #fff; border-bottom: 1px solid var(--soft-green); display: flex; align-items: center; padding: 0 1rem; z-index: 1050; gap: 1rem; }
+  .mobile-header { position: fixed; top: 0; left: 0; right: 0; height: 60px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 0 1rem; z-index: 1050; gap: 1rem; }
   .mobile-logo { display: flex; align-items: center; }
   .mobile-logo .logo-nt { width: 36px; height: 36px; font-size: 0.9rem; }
-  #sidebar-toggle { font-size: 1.75rem; color: #334155; }
+  #sidebar-toggle { font-size: 1.75rem; color: var(--text-primary); background: none; border: none; }
   #sidebar-overlay { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); z-index: 1199; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
   #sidebar-overlay.is-visible { opacity: 1; visibility: visible; }
   #main { margin-left: 0; padding-top: 60px; }
@@ -93,34 +148,19 @@ body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--b
 }
 
 /* =============================================== */
-/* ESTILOS ESPECÍFICOS PARA perfil.html            */
+/* ESTILOS ESPECÍFICOS DO PERFIL                   */
 /* =============================================== */
-.profile-container {
-  max-width: 800px;
-  margin: 0 auto;
-}
-.profile-card {
-  border: 1px solid var(--soft-green);
-  border-radius: var(--card-radius);
-  background-color: #fff;
-}
+.profile-container { max-width: 800px; margin: 0 auto; }
 .profile-card .card-body { padding: 2rem; }
-.profile-card .card-title { font-weight: 600; display: flex; align-items: center; }
+.profile-card .card-title { font-weight: 600; display: flex; align-items: center; color: var(--text-primary); }
 .profile-card .card-title i { color: var(--nt-green); }
 
-/* profile photo styles removed (photo feature was removed) */
-
-/* Estilos para a Zona de Perigo */
-.danger-zone-card {
-  border-color: #f8d7da;
-}
-.danger-zone-card .card-title i {
-  color: #dc3545;
-}
-.danger-zone-card .alert.alert-danger {
-  background-color: #f8d7da;
-  border-color: #f5c2c7;
-}
+/* Zona de Perigo */
+.danger-zone-card { border-color: #f8d7da; }
+[data-theme="dark"] .danger-zone-card { border-color: #58151c; background-color: #2c0b0e; }
+.danger-zone-card .card-title i { color: #dc3545; }
+.danger-zone-card .alert.alert-danger { background-color: #f8d7da; border-color: #f5c2c7; color: #842029; }
+[data-theme="dark"] .danger-zone-card .alert.alert-danger { background-color: #58151c; border-color: #842029; color: #ea868f; }
 
 .btn-success { background-color: var(--nt-green); border-color: var(--nt-green); padding: 0.6rem 1.5rem; }
 .btn-success:hover { background-color: #197535; border-color: #197535; }
