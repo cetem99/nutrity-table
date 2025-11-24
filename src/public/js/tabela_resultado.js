@@ -35,9 +35,14 @@ if (exportCsvBtn) {
         
         // Limpa o texto
         const c1 = cells[0].textContent.trim();
-        const c2 = cells[1].textContent.trim();
-        const c3 = cells[2].textContent.trim();
-        const c4 = cells[3].textContent.trim();
+  const rawC2 = cells[1].textContent.trim();
+  const rawC3 = cells[2].textContent.trim();
+  const c2 = rawC2.replace(/%/g, '').replace(/[^0-9,\.\-]/g, '').trim();
+  const c3 = rawC3.replace(/%/g, '').replace(/[^0-9,\.\-]/g, '').trim();
+  let c4 = cells[3].textContent.trim();
+  // remove percent sign if present and convert dash to empty
+  c4 = c4.replace(/%/g, '').trim();
+  if (c4 === '-' || c4 === '') c4 = '';
 
         tableRows += `
           <tr>
@@ -88,7 +93,7 @@ if (exportCsvBtn) {
             </tr>
             <tr>
               <td colspan="4" style="text-align: center; border-left: 2px solid #000; border-right: 2px solid #000;">
-                 Porções por embalagem: -- <br> Porção: ${document.getElementById('portion').value} g
+                 Porções por embalagem: -- <br> Porção: ${document.getElementById('portion').value}
               </td>
             </tr>
             
@@ -192,9 +197,11 @@ function exportTableToCSV() {
 
         // Envolvemos os valores em aspas duplas para garantir segurança
         const nutrient = `"${clean(cells[0])}"`;
-        const val100 = `"${clean(cells[1])}"`;
-        const valPortion = `"${clean(cells[2])}"`;
-        const valVD = `"${clean(cells[3])}"`;
+    const val100 = `"${clean(cells[1]).replace(/%/g, '').replace(/[^0-9,\.\-]/g, '')}"`;
+    const valPortion = `"${clean(cells[2]).replace(/%/g, '').replace(/[^0-9,\.\-]/g, '')}"`;
+    // remove percent sign from VD column for CSV export and strip any non-numeric chars
+    const vdClean = clean(cells[3]).replace(/%/g, '').trim();
+    const valVD = `"${vdClean === '-' ? '' : vdClean.replace(/[^0-9,\.\-]/g, '')}"`;
 
         csvContent += [nutrient, val100, valPortion, valVD].join(SEPARATOR) + "\r\n";
       });
@@ -312,10 +319,11 @@ function exportTableToCSV() {
         if (it.nutrition) {
           const nut = document.createElement('div');
           nut.className = 'mt-2 small';
-          const e = it.nutrition.energy_kcal != null ? `${fmt(it.nutrition.energy_kcal)} kcal` : '—';
-          const p = it.nutrition.protein_g != null ? `${fmt(it.nutrition.protein_g)} g` : '—';
-          const f = it.nutrition.fat_g != null ? `${fmt(it.nutrition.fat_g)} g` : '—';
-          const c = it.nutrition.carbs_g != null ? `${fmt(it.nutrition.carbs_g)} g` : '—';
+          // show numbers only (no units)
+          const e = it.nutrition.energy_kcal != null ? `${fmt(it.nutrition.energy_kcal)}` : '—';
+          const p = it.nutrition.protein_g != null ? `${fmt(it.nutrition.protein_g)}` : '—';
+          const f = it.nutrition.fat_g != null ? `${fmt(it.nutrition.fat_g)}` : '—';
+          const c = it.nutrition.carbs_g != null ? `${fmt(it.nutrition.carbs_g)}` : '—';
           nut.innerHTML = `<strong>Por 100g:</strong> Energia: ${e} • Proteína: ${p} • Gordura: ${f} • Carboidrato: ${c}`;
           li.appendChild(nut);
         }
@@ -342,6 +350,8 @@ function exportTableToCSV() {
 
       // VD reference values (ANVISA RDC 429/2020) for 2.000 kcal diet
       const VD_REF = {
+        // Energia em kcal para dieta de 2000 kcal
+        energy_kcal: 2000.0,
         carbs_g: 300.0,
         protein_g: 75.0,
         fat_g: 55.0,
@@ -409,7 +419,8 @@ function exportTableToCSV() {
       function renderNutritionRows(portionSize) {
         nutContainer.innerHTML = '';
         const ps = Number(portionSize) || Number(t.portionSize) || 50;
-        portionMeta.innerHTML = `Porções por embalagem: -- <br> Porção: ${ps} g`;
+  // show portion number only (no unit)
+  portionMeta.innerHTML = `Porções por embalagem: -- <br> Porção: ${ps}`;
 
         nutrientsKeys.forEach(n => {
           const totalForRecipe = totals[n.key] || 0;
@@ -427,14 +438,24 @@ function exportTableToCSV() {
           const vdValue = VD_REF[n.key] ?? null;
           let vdPercent = '-';
           if (vdValue != null && !isNaN(perPortion)) {
+            // Round to nearest integer percent as requested
             const raw = (perPortion / vdValue) * 100.0;
-            const rounded = Math.round(raw * 10) / 10.0;
-            vdPercent = rounded.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+            const roundedInt = Math.round(raw);
+            vdPercent = roundedInt.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+          } else {
+            // Special case: if there's no VD defined but the nutrient amount in the portion is exactly zero,
+            // show 0 for certain nutrients (Açúcares totais and Gorduras trans) instead of leaving blank.
+            if (!isNaN(perPortion) && Math.abs(Number(perPortion)) < 1e-6 && (n.key === 'sugars_total_g' || n.key === 'fat_trans_g')) {
+              // treat very small values as zero for display purposes
+              vdPercent = (0).toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            }
           }
           row.dataset.vd = vdPercent;
           row.dataset.unit = n.unit || '';
-          const vdDisplay = vdPercent === '-' ? '-' : `${vdPercent}%`;
-          row.innerHTML = `<div>${n.label}</div><div>${showValue(per100g)} ${n.unit}</div><div>${showValue(perPortion)} ${n.unit}</div><div>${vdDisplay}</div>`;
+          // show %VD value as number only (no percent sign). Empty when no VD available.
+          const vdDisplay = vdPercent === '-' ? '' : vdPercent;
+          // display numbers only (no units)
+          row.innerHTML = `<div>${n.label}</div><div>${showValue(per100g)}</div><div>${showValue(perPortion)}</div><div>${vdDisplay}</div>`;
           nutContainer.appendChild(row);
         });
       }
