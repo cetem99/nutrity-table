@@ -1,5 +1,5 @@
 import User from "../models/User.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 // Note: routes using these controllers should be protected by auth middleware
 // so `req.userId` is available. Prefer token-based identification over

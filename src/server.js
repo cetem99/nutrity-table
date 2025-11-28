@@ -14,6 +14,7 @@ dotenv.config();
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const publicDir = path.join(__dirname, 'public');
 
 // Middlewares
 app.use(cors());
@@ -21,7 +22,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Public (serve seus HTML/CSS/JS/imagens)
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(publicDir));
+app.use('/src/public', express.static(publicDir));
 
 // Conectar no MongoDB
 connectDB();
@@ -31,9 +33,9 @@ app.use('/api/users', userRoutes);
 app.use("/api/profile", profileRoutes);
 app.use('/api/tables', tableRoutes);
 
-// Fallback: serve login.html para root
+// Landing page
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+  res.sendFile(path.join(process.cwd(), 'index.html'));
 });
 
 // Start
