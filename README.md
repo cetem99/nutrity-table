@@ -1,4 +1,4 @@
-# Nutrity Table
+# Nutrity Table 🍽
 
 Backend em Node.js/Express para gerar e salvar tabelas nutricionais com base em JSONs locais do TACO/AGTACO e MongoDB. Inclui autenticação JWT, páginas estáticas em `src/public` e APIs para CRUD de usuários, perfis e tabelas.
 
